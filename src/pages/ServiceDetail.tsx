@@ -81,6 +81,33 @@ export default function ServiceDetail() {
               />
             </div>
           )}
+
+          {service.slug === 'websites' &&
+            (() => {
+              const cd = service.features.find((f) => f.slug === 'custom-design');
+              if (!cd) return null;
+              return (
+                <div className="mt-20 flex flex-col gap-12 lg:flex-row lg:items-center lg:gap-16">
+                  <Reveal className="lg:w-5/12 shrink-0">
+                    <Eyebrow>{cd.title}</Eyebrow>
+                    <h2 className="poster mt-5 text-[clamp(2rem,4.5vw,3rem)] text-ink">
+                      {cd.title}.
+                    </h2>
+                    <p className="mt-6 font-body text-lg leading-relaxed text-ink/65">
+                      {cd.detail}
+                    </p>
+                  </Reveal>
+
+                  {cd.img && (
+                    <Reveal delay={0.15} className="lg:flex-1 min-w-0">
+                      <div className="overflow-hidden rounded-2xl border border-line shadow-xl">
+                        <img src={cd.img} alt={cd.title} className="w-full" />
+                      </div>
+                    </Reveal>
+                  )}
+                </div>
+              );
+            })()}
         </Container>
       </section>
 
@@ -94,22 +121,25 @@ export default function ServiceDetail() {
             </h2>
           </Reveal>
 
-          <div className="mt-14 grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-2">
-            {service.features.map((f, i) => (
-              <Reveal
-                key={f.title}
-                delay={i * 0.08}
-                className="flex flex-col bg-paper p-8"
-              >
-                <Check className="h-5 w-5 text-blue" strokeWidth={2.5} />
-                <h3 className="mt-5 font-heading text-lg font-semibold text-ink">
-                  {f.title}
-                </h3>
-                <p className="mt-2 font-body text-[15px] leading-relaxed text-ink/60">
-                  {f.body}
-                </p>
-              </Reveal>
-            ))}
+          <div className="mt-14 flex flex-col divide-y divide-line border-y border-line">
+            {service.features.map((f, i) => {
+              return (
+                <Reveal key={f.slug} y={40}>
+                  <div className="flex items-start gap-8 py-10 md:gap-16 md:py-14">
+                    <span className="mt-1 shrink-0 font-heading text-sm font-semibold tabular-nums text-ink/25">
+                      0{i + 1}
+                    </span>
+                    <div className="flex-1">
+                      <h3 className="font-heading text-2xl font-semibold text-ink md:text-3xl">
+                        {f.title}
+                      </h3>
+                      <p className="mt-3 max-w-xl font-body text-base leading-relaxed text-ink/60">{f.body}</p>
+                    </div>
+                    <Check className="mt-1.5 h-5 w-5 shrink-0 text-blue" strokeWidth={2.5} />
+                  </div>
+                </Reveal>
+              );
+            })}
           </div>
         </Container>
       </section>
