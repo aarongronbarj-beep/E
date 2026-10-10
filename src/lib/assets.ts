@@ -1,6 +1,13 @@
 /** Generated brand imagery (Higgsfield, pure cobalt duotone). Swap freely. */
 export const IMG = {
   heroNoise: '/images/hero-noise.webp',
+  // Backgrounds behind the hero. `heroRiso` is the grainy screen-print field
+  // in use; `heroLiquid` is the earlier, much softer wash, kept for comparison.
+  heroRiso: '/images/hero-riso.webp',
+  heroLiquid: '/images/hero-liquid.webp',
+  // Halftone artwork banding the page into blocks. Alternate take without the
+  // typography: /images/art-seam.webp
+  artSeam: '/images/art-seam-poster.webp',
   dataWave: '/images/data-wave.webp',
   work: ['/images/work-1.webp', '/images/work-2.webp', '/images/work-3.webp'],
   // Placeholder: replace with a real photo of the two founders.

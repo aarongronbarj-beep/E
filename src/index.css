@@ -23,8 +23,20 @@
   text-rendering: optimizeLegibility;
 }
 
+/* Anchor fallback for when Lenis is off (reduced motion). While Lenis runs it
+   marks <html>, and its own eased scrolling takes over from these. */
 html {
   scroll-behavior: smooth;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 body {

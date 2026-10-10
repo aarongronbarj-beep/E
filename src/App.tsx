@@ -6,6 +6,7 @@ import {
   Navigate,
   useLocation,
 } from 'react-router-dom';
+import { useSmoothScroll, jumpToTop } from './lib/smoothScroll';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -16,12 +17,13 @@ function ScrollToTop() {
   const { pathname, hash } = useLocation();
   useEffect(() => {
     if (hash) return;
-    window.scrollTo(0, 0);
+    jumpToTop();
   }, [pathname, hash]);
   return null;
 }
 
 export default function App() {
+  useSmoothScroll();
   return (
     <BrowserRouter>
       <ScrollToTop />
