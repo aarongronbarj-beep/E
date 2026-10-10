@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { Container, Button } from './primitives';
 import Wordmark from './Wordmark';
 
 const LINKS = [
-  { label: 'Services', href: '/#services' },
-  { label: 'Work', href: '/#work' },
-  { label: 'About', href: '/#about' },
-  { label: 'Pricing', href: '/#pricing' },
+  { label: 'Services', href: '/services' },
+  { label: 'Work', href: '/work' },
+  { label: 'About', href: '/about' },
+  { label: 'Pricing', href: '/pricing' },
 ];
 
 export default function Nav() {
@@ -36,18 +36,22 @@ export default function Nav() {
 
         <nav className="hidden items-center gap-8 md:flex">
           {LINKS.map((l) => (
-            <a
+            <NavLink
               key={l.href}
-              href={l.href}
-              className="font-body text-sm text-ink/65 transition-colors hover:text-ink"
+              to={l.href}
+              className={({ isActive }) =>
+                `font-body text-sm transition-colors hover:text-ink ${
+                  isActive ? 'text-blue' : 'text-ink/65'
+                }`
+              }
             >
               {l.label}
-            </a>
+            </NavLink>
           ))}
         </nav>
 
         <div className="hidden md:block">
-          <Button href="/#contact">Contact us</Button>
+          <Button href="/contact">Contact us</Button>
         </div>
 
         <button
@@ -69,16 +73,18 @@ export default function Nav() {
         <div className="border-t border-line bg-paper md:hidden">
           <Container className="flex flex-col py-4">
             {LINKS.map((l) => (
-              <a
+              <NavLink
                 key={l.href}
-                href={l.href}
+                to={l.href}
                 onClick={() => setOpen(false)}
-                className="py-3 font-body text-sm text-ink/75"
+                className={({ isActive }) =>
+                  `py-3 font-body text-sm ${isActive ? 'text-blue' : 'text-ink/75'}`
+                }
               >
                 {l.label}
-              </a>
+              </NavLink>
             ))}
-            <Button href="/#contact" className="mt-2 justify-center">
+            <Button href="/contact" className="mt-2 justify-center">
               Contact us
             </Button>
           </Container>

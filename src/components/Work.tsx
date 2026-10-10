@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import gsap from 'gsap';
 import { Flip } from 'gsap/Flip';
@@ -6,15 +7,9 @@ import { useGSAP } from '@gsap/react';
 import { Container, Eyebrow } from './primitives';
 import Reveal from './Reveal';
 import { useStatic } from '../lib/motion';
-import { IMG } from '../lib/assets';
+import { PROJECTS } from '../lib/projects';
 
 gsap.registerPlugin(Flip, useGSAP);
-
-const PROJECTS = [
-  { name: 'KOTI Pizza', tag: 'Website', img: IMG.work[0] },
-  { name: 'Helsinki Bikes', tag: 'Website & Analytics', img: IMG.work[1] },
-  { name: 'Nordic Clean', tag: 'Website & Automation', img: IMG.work[2] },
-];
 
 /** Filter labels, derived from the tags rather than hand-listed, so adding a
  *  project with a new discipline adds its filter automatically. */
@@ -83,13 +78,13 @@ export default function Work() {
               <br className="hidden md:block" /> across Finland.
             </h2>
           </div>
-          <a
-            href="#contact"
+          <Link
+            to="/contact"
             className="group inline-flex items-center gap-2 font-body text-sm text-ink/70 transition-colors hover:text-blue"
           >
-            See all work
+            Start your project
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </a>
+          </Link>
         </Reveal>
 
         <Reveal className="mt-10 flex flex-wrap gap-2" delay={0.06}>
@@ -112,21 +107,21 @@ export default function Work() {
 
         <div
           ref={grid}
-          className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          className="mt-10 grid gap-6 sm:grid-cols-2"
         >
           {PROJECTS.map((p, i) => (
             // Cards stay mounted and are hidden with `display: none` rather
             // than unmounted, so Flip can measure them on both sides of the
             // change and drive its own enter/leave.
             <div
-              key={p.name}
+              key={p.slug}
               data-card
               className={shows(p.tag) ? '' : 'hidden'}
             >
               {/* Reveal sits inside the flip target: it animates transforms
                   too, and Flip must own the outer element's transform alone. */}
               <Reveal delay={i * 0.08}>
-                <a href="#contact" className="group block">
+                <Link to={`/work/${p.slug}`} className="group block">
                   <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-line bg-paper-2">
                     <img
                       src={p.img}
@@ -146,7 +141,7 @@ export default function Work() {
                       {p.tag}
                     </span>
                   </div>
-                </a>
+                </Link>
               </Reveal>
             </div>
           ))}

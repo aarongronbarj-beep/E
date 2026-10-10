@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 
 /** Centered 1200px editorial container with consistent gutters. */
 export function Container({
@@ -59,8 +60,17 @@ export function Button({
     ghost: 'text-ink/70 hover:text-ink',
     white: 'bg-white text-ink hover:bg-paper-2',
   };
+  const cls = `${base} ${variants[variant]} ${className}`;
+  // In-app routes go through the router so the page doesn't reload.
+  if (href.startsWith('/')) {
+    return (
+      <Link to={href} className={cls}>
+        {children}
+      </Link>
+    );
+  }
   return (
-    <a href={href} className={`${base} ${variants[variant]} ${className}`}>
+    <a href={href} className={cls}>
       {children}
     </a>
   );

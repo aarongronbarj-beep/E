@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin';
 import { useGSAP } from '@gsap/react';
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useStatic } from '../lib/motion';
 
 gsap.registerPlugin(ScrambleTextPlugin, useGSAP);
@@ -95,9 +96,9 @@ export default function GlitchButton({
   );
 
   return (
-    <a
+    <Link
       ref={root}
-      href={href}
+      to={href}
       aria-label={label}
       onPointerEnter={() => fire.current()}
       onFocus={() => fire.current()}
@@ -121,6 +122,6 @@ export default function GlitchButton({
         </span>
       </span>
       <ArrowRight ref={arrow} aria-hidden className="h-4 w-4" />
-    </a>
+    </Link>
   );
 }

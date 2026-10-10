@@ -1,15 +1,14 @@
 import ArtSeam from '../components/ArtSeam';
 import Panel from '../components/Panel';
 import Hero from '../components/Hero';
-import Services from '../components/Services';
 import Path from '../components/Path';
 import Flywheel from '../components/Flywheel';
 import DarkSignal from '../components/DarkSignal';
-import Work from '../components/Work';
-import Founders from '../components/Founders';
-import Pricing from '../components/Pricing';
-import Contact from '../components/Contact';
 
+/**
+ * The landing page tells the story only. Each category — Services, Work,
+ * About, Pricing, Contact — lives on its own route and is reached from the nav.
+ */
 export default function Home() {
   return (
     <>
@@ -18,10 +17,6 @@ export default function Home() {
       </Panel>
 
       <ArtSeam />
-
-      <Panel distance={56}>
-        <Services />
-      </Panel>
 
       {/* Left out of Panel on purpose. Panel animates a transform on its
           wrapper while scrolling, and ScrollTrigger measures its start and end
@@ -36,22 +31,6 @@ export default function Home() {
 
       <Panel>
         <DarkSignal />
-      </Panel>
-
-      <Panel>
-        <Work />
-      </Panel>
-
-      <Panel>
-        <Founders />
-      </Panel>
-
-      <Panel>
-        <Pricing />
-      </Panel>
-
-      <Panel>
-        <Contact />
       </Panel>
     </>
   );

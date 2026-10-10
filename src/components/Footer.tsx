@@ -16,17 +16,17 @@ const COLS: { title: string; links: FooterLink[] }[] = [
   {
     title: 'Company',
     links: [
-      { label: 'Work', href: '/#work' },
-      { label: 'About', href: '/#about' },
-      { label: 'Pricing', href: '/#pricing' },
+      { label: 'Work', to: '/work' },
+      { label: 'About', to: '/about' },
+      { label: 'Pricing', to: '/pricing' },
     ],
   },
   {
     title: 'Contact',
     links: [
       { label: 'hello@ealize.fi', href: 'mailto:hello@ealize.fi' },
-      { label: 'Book a call', href: '/#contact' },
-      { label: 'Helsinki, Finland', href: '/#contact' },
+      { label: 'Book a call', to: '/contact' },
+      { label: 'Helsinki, Finland', to: '/contact' },
     ],
   },
 ];

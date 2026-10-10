@@ -9,7 +9,11 @@ export const IMG = {
   // typography: /images/art-seam.webp
   artSeam: '/images/art-seam-poster.webp',
   dataWave: '/images/data-wave.webp',
-  work: ['/images/work-1.webp', '/images/work-2.webp', '/images/work-3.webp'],
+  work: {
+    kokkoma: '/images/work-kokkoma.jpg',
+    // Placeholder: replace with a screenshot of the Kesäyrittäjät.fi site.
+    kesayrittajat: '/images/hero-noise.webp',
+  },
   // Placeholder: replace with a real photo of the two founders.
   founders: '/images/founders.webp',
   // Higgsfield-generated fanned-mockup visuals, one per service card.

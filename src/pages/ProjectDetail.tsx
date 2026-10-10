@@ -1,0 +1,193 @@
+import { useEffect } from 'react';
+import { Link, Navigate, useParams } from 'react-router-dom';
+import { ArrowLeft, ArrowUpRight } from 'lucide-react';
+import { Container, Eyebrow, Button } from '../components/primitives';
+import Reveal from '../components/Reveal';
+import { getProject, PROJECTS } from '../lib/projects';
+
+export default function ProjectDetail() {
+  const { slug } = useParams();
+  const project = getProject(slug);
+
+  useEffect(() => {
+    if (project) document.title = `${project.name} — Ealize`;
+    return () => {
+      document.title = 'Ealize';
+    };
+  }, [project]);
+
+  if (!project) return <Navigate to="/work" replace />;
+
+  const others = PROJECTS.filter((p) => p.slug !== project.slug);
+
+  return (
+    <>
+      {/* Hero */}
+      <section className="border-b border-line bg-paper-2 pt-28 pb-20 md:pt-36 md:pb-28">
+        <Container>
+          <Reveal className="max-w-3xl">
+            <Link
+              to="/work"
+              className="group inline-flex items-center gap-2 font-body text-sm text-ink/60 transition-colors hover:text-blue"
+            >
+              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+              All work
+            </Link>
+
+            <div className="mt-8">
+              <Eyebrow>{project.tag}</Eyebrow>
+            </div>
+            <h1 className="poster mt-5 text-[clamp(2.5rem,6vw,4.25rem)] text-ink">
+              {project.name}
+            </h1>
+            <p className="mt-6 font-body text-lg leading-relaxed text-ink/65">
+              {project.summary}
+            </p>
+
+            {project.url && (
+              <div className="mt-9">
+                <Button href={project.url}>
+                  Visit the site
+                  <ArrowUpRight className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
+          </Reveal>
+
+          <Reveal delay={0.15} className="mt-16">
+            <div className="overflow-hidden rounded-2xl border border-line shadow-xl">
+              <img
+                src={project.img}
+                alt={project.name}
+                className="aspect-[16/9] w-full object-cover"
+              />
+            </div>
+          </Reveal>
+        </Container>
+      </section>
+
+      {/* Facts + story */}
+      <section className="border-b border-line bg-paper py-24 md:py-32">
+        <Container>
+          <div className="grid gap-14 lg:grid-cols-12">
+            <Reveal className="lg:col-span-4">
+              <dl className="flex flex-col divide-y divide-line border-y border-line">
+                {project.facts.map((f) => (
+                  <div key={f.label} className="py-5">
+                    <dt className="eyebrow text-ink/45">{f.label}</dt>
+                    <dd className="mt-2 font-body text-base text-ink">{f.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </Reveal>
+
+            <div className="flex flex-col gap-14 lg:col-span-7 lg:col-start-6">
+              <Reveal>
+                <Eyebrow>The challenge</Eyebrow>
+                <p className="mt-5 font-body text-lg leading-relaxed text-ink/70">
+                  {project.challenge}
+                </p>
+              </Reveal>
+              <Reveal>
+                <Eyebrow>What we did</Eyebrow>
+                <p className="mt-5 font-body text-lg leading-relaxed text-ink/70">
+                  {project.solution}
+                </p>
+              </Reveal>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Delivered */}
+      <section className="border-b border-line bg-paper py-24 md:py-32">
+        <Container>
+          <Reveal className="max-w-2xl">
+            <Eyebrow>Delivered</Eyebrow>
+            <h2 className="poster mt-6 text-[clamp(2rem,4.5vw,3rem)] text-ink">
+              What we built.
+            </h2>
+          </Reveal>
+
+          <div className="mt-14 flex flex-col divide-y divide-line border-y border-line">
+            {project.delivered.map((d, i) => (
+              <Reveal key={d.title} y={40}>
+                <div className="flex items-start gap-8 py-10 md:gap-16 md:py-14">
+                  <span className="mt-1 shrink-0 font-heading text-sm font-semibold tabular-nums text-ink/25">
+                    0{i + 1}
+                  </span>
+                  <div className="flex-1">
+                    <h3 className="font-heading text-2xl font-semibold text-ink md:text-3xl">
+                      {d.title}
+                    </h3>
+                    <p className="mt-3 max-w-xl font-body text-base leading-relaxed text-ink/60">
+                      {d.text}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* Other projects */}
+      {others.length > 0 && (
+        <section className="border-b border-line bg-paper-2 py-24 md:py-32">
+          <Container>
+            <Reveal>
+              <Eyebrow>Keep exploring</Eyebrow>
+              <h2 className="poster mt-6 text-[clamp(2rem,4.5vw,3rem)] text-ink">
+                More work.
+              </h2>
+            </Reveal>
+
+            <div className="mt-12 grid gap-6 sm:grid-cols-2">
+              {others.map((p, i) => (
+                <Reveal key={p.slug} delay={i * 0.08}>
+                  <Link to={`/work/${p.slug}`} className="group block">
+                    <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-line bg-paper">
+                      <img
+                        src={p.img}
+                        alt={`${p.name}: ${p.tag}`}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                      />
+                    </div>
+                    <div className="mt-4 flex items-baseline justify-between">
+                      <h3 className="font-heading text-lg font-semibold text-ink">
+                        {p.name}
+                      </h3>
+                      <span className="font-body text-sm text-ink/50">{p.tag}</span>
+                    </div>
+                  </Link>
+                </Reveal>
+              ))}
+            </div>
+          </Container>
+        </section>
+      )}
+
+      {/* CTA */}
+      <section className="bg-blue py-24 md:py-32">
+        <Container>
+          <Reveal className="max-w-2xl">
+            <h2 className="poster text-[clamp(2.25rem,5vw,3.5rem)] text-white">
+              Want results like this?
+            </h2>
+            <p className="mt-6 max-w-lg font-body text-base leading-relaxed text-white/80">
+              Book a free 15-minute call and we'll tell you exactly what your
+              business needs. No commitment, no pressure.
+            </p>
+            <div className="mt-9">
+              <Button href="/contact" variant="white">
+                Book a free call
+                <ArrowUpRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </Reveal>
+        </Container>
+      </section>
+    </>
+  );
+}

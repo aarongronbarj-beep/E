@@ -42,7 +42,7 @@ export default function Founders() {
               </div>
 
               <div className="mt-10">
-                <Button href="#contact">Get to know us</Button>
+                <Button href="/contact">Get to know us</Button>
               </div>
             </Reveal>
           </div>

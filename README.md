@@ -34,5 +34,6 @@ and referenced from `src/lib/assets.ts`. Swap any file there.
 ### Edit before launch
 - `public/images/founders.webp` — replace with a **real photo** of the two founders.
 - `src/components/Pricing.tsx` — prices are placeholders (`from €390 / €690 / Custom`).
-- Logo names in `src/components/LogoStrip.tsx` and `Work.tsx` are sample clients.
+- Logo names in `src/components/LogoStrip.tsx` are sample clients.
+- `src/lib/projects.ts` — the Kesäyrittäjät.fi entry has placeholder copy, and `public/images/hero-noise.webp` stands in for its screenshot.
 - Contact details (`hello@ealize.fi`, Helsinki) live in `Contact.tsx` / `Footer.tsx`.

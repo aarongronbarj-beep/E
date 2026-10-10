@@ -114,7 +114,7 @@ export default function Pricing() {
                   ))}
                 </ul>
                 <a
-                  href="#contact"
+                  href="/contact"
                   className={`mt-8 inline-flex items-center justify-center rounded-[6px] px-5 py-3 text-sm font-medium transition-colors ${
                     p.featured
                       ? 'bg-white text-blue hover:bg-paper-2'

@@ -91,7 +91,7 @@ export default function Hero() {
             </h1>
 
             <motion.div {...fadeProps(0.55)} className="mt-10">
-              <GlitchButton href="#contact" label="Book a free call" />
+              <GlitchButton href="/contact" label="Book a free call" />
             </motion.div>
           </div>
 

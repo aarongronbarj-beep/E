@@ -28,7 +28,7 @@ export default function ServiceDetail() {
           <div className={service.slug === 'websites' ? 'flex flex-col gap-12 lg:flex-row lg:items-center lg:gap-16' : ''}>
             <Reveal className={service.slug === 'websites' ? 'lg:w-5/12 shrink-0' : 'max-w-2xl'}>
               <Link
-                to="/#services"
+                to="/services"
                 className="group inline-flex items-center gap-2 font-body text-sm text-ink/60 transition-colors hover:text-blue"
               >
                 <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
@@ -46,11 +46,11 @@ export default function ServiceDetail() {
               </p>
 
               <div className="mt-9 flex flex-wrap items-center gap-4">
-                <Button href="/#contact">
+                <Button href="/contact">
                   Book a free call
                   <ArrowUpRight className="h-4 w-4" />
                 </Button>
-                <Button href="/#pricing" variant="outline">
+                <Button href="/pricing" variant="outline">
                   See pricing
                 </Button>
               </div>
@@ -192,7 +192,7 @@ export default function ServiceDetail() {
               business needs. No commitment, no pressure.
             </p>
             <div className="mt-9">
-              <Button href="/#contact" variant="white">
+              <Button href="/contact" variant="white">
                 Book a free call
                 <ArrowUpRight className="h-4 w-4" />
               </Button>

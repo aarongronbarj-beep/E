@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
 import { ArrowRight } from 'lucide-react';
 import { useGSAP } from '@gsap/react';
+import { Link } from 'react-router-dom';
 import { Container, Eyebrow } from './primitives';
 import { useStatic } from '../lib/motion';
 
@@ -289,13 +290,13 @@ export default function Path() {
               one engagement that keeps compounding: every stop makes the next
               one cheaper and the one after it obvious.
             </p>
-            <a
-              href="#contact"
+            <Link
+              to="/contact"
               className="mt-10 inline-flex items-center gap-3 bg-white px-8 py-4 font-body text-base font-medium text-ink transition-colors hover:bg-blue-100"
             >
               Book a free call
               <ArrowRight className="h-4 w-4" />
-            </a>
+            </Link>
           </div>
         </Container>
       </div>

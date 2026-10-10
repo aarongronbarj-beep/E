@@ -34,7 +34,7 @@ export default function DarkSignal() {
               next. So every decision is backed by evidence, not guesswork.
             </p>
             <div className="mt-9">
-              <Button href="#services" variant="white">
+              <Button href="/services" variant="white">
                 See how it works
               </Button>
             </div>
