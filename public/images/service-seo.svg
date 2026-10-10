@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 880" font-family="Inter, system-ui, sans-serif">
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#0A0E1A" flood-opacity="0.16"/>
+    </filter>
+    <linearGradient id="area" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#002FD6" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#002FD6" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Back card: ranking climbing -->
+  <g transform="translate(70 -40) rotate(-7 860 360)" filter="url(#shadow)">
+    <rect x="620" y="150" width="480" height="380" rx="22" fill="#FFFFFF"/>
+    <text x="660" y="210" font-size="22" font-weight="600" fill="#0A0E1A">Google ranking</text>
+    <text x="660" y="240" font-size="15" fill="#0A0E1A" fill-opacity="0.5">Average position, last 12 weeks</text>
+    <rect x="960" y="186" width="104" height="38" rx="19" fill="#002FD6"/>
+    <text x="1012" y="211" font-size="16" font-weight="600" fill="#FFFFFF" text-anchor="middle">Top 5</text>
+    <g stroke="#E5E7EF" stroke-width="2">
+      <line x1="660" y1="300" x2="1064" y2="300"/>
+      <line x1="660" y1="370" x2="1064" y2="370"/>
+      <line x1="660" y1="440" x2="1064" y2="440"/>
+    </g>
+    <path d="M660 470 L720 452 L780 458 L840 420 L900 404 L960 352 L1020 330 L1064 296 L1064 490 L660 490 Z" fill="url(#area)"/>
+    <path d="M660 470 L720 452 L780 458 L840 420 L900 404 L960 352 L1020 330 L1064 296" fill="none" stroke="#002FD6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="1064" cy="296" r="9" fill="#FFFFFF" stroke="#002FD6" stroke-width="5"/>
+  </g>
+
+  <!-- Front card: search results with the client on top -->
+  <g transform="rotate(3 405 470)" filter="url(#shadow)">
+    <rect x="110" y="170" width="590" height="600" rx="22" fill="#FFFFFF"/>
+    <rect x="110" y="170" width="590" height="56" rx="22" fill="#F6F7FB"/>
+    <rect x="110" y="204" width="590" height="22" fill="#F6F7FB"/>
+    <circle cx="146" cy="198" r="7" fill="#0A0E1A" fill-opacity="0.15"/>
+    <circle cx="170" cy="198" r="7" fill="#0A0E1A" fill-opacity="0.15"/>
+    <circle cx="194" cy="198" r="7" fill="#0A0E1A" fill-opacity="0.15"/>
+
+    <rect x="146" y="254" width="518" height="56" rx="28" fill="#FFFFFF" stroke="#E5E7EF" stroke-width="2"/>
+    <circle cx="180" cy="280" r="10" fill="none" stroke="#002FD6" stroke-width="3.5"/>
+    <line x1="187" y1="287" x2="196" y2="296" stroke="#002FD6" stroke-width="3.5" stroke-linecap="round"/>
+    <text x="214" y="289" font-size="19" fill="#0A0E1A">concrete repair helsinki</text>
+
+    <!-- Result 1: highlighted -->
+    <rect x="146" y="336" width="518" height="142" rx="16" fill="#002FD6" fill-opacity="0.06" stroke="#002FD6" stroke-opacity="0.35" stroke-width="2"/>
+    <circle cx="184" cy="374" r="18" fill="#002FD6"/>
+    <text x="184" y="381" font-size="18" font-weight="700" fill="#FFFFFF" text-anchor="middle">1</text>
+    <text x="216" y="368" font-size="15" fill="#0A0E1A" fill-opacity="0.5">yourbusiness.fi</text>
+    <text x="216" y="396" font-size="22" font-weight="600" fill="#002FD6">Your business — first result</text>
+    <rect x="216" y="414" width="410" height="10" rx="5" fill="#0A0E1A" fill-opacity="0.12"/>
+    <rect x="216" y="434" width="360" height="10" rx="5" fill="#0A0E1A" fill-opacity="0.12"/>
+    <g fill="#002FD6">
+      <text x="216" y="466" font-size="16" letter-spacing="2">★★★★★</text>
+    </g>
+    <text x="320" y="466" font-size="14" fill="#0A0E1A" fill-opacity="0.5">5.0 · Google reviews</text>
+
+    <!-- Results 2–4: muted -->
+    <g fill="#0A0E1A">
+      <rect x="216" y="508" width="150" height="10" rx="5" fill-opacity="0.1"/>
+      <rect x="216" y="530" width="320" height="14" rx="7" fill-opacity="0.22"/>
+      <rect x="216" y="556" width="400" height="10" rx="5" fill-opacity="0.08"/>
+
+      <rect x="216" y="596" width="130" height="10" rx="5" fill-opacity="0.1"/>
+      <rect x="216" y="618" width="290" height="14" rx="7" fill-opacity="0.22"/>
+      <rect x="216" y="644" width="400" height="10" rx="5" fill-opacity="0.08"/>
+
+      <rect x="216" y="684" width="160" height="10" rx="5" fill-opacity="0.1"/>
+      <rect x="216" y="706" width="270" height="14" rx="7" fill-opacity="0.22"/>
+    </g>
+    <g fill="#0A0E1A" fill-opacity="0.25" font-size="16" font-weight="600" text-anchor="middle">
+      <text x="184" y="542">2</text>
+      <text x="184" y="630">3</text>
+      <text x="184" y="718">4</text>
+    </g>
+  </g>
+</svg>

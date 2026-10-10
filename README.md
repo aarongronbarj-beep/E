@@ -33,7 +33,8 @@ and referenced from `src/lib/assets.ts`. Swap any file there.
 
 ### Edit before launch
 - `public/images/founders.webp` — replace with a **real photo** of the two founders.
-- `src/components/Pricing.tsx` — prices are placeholders (`from €390 / €690 / Custom`).
+- `src/components/Pricing.tsx` — prices are placeholders (Website `from €399`, Digital Marketing `Monthly`, Full System `Custom`).
 - Logo names in `src/components/LogoStrip.tsx` are sample clients.
 - `src/lib/projects.ts` — the Kesäyrittäjät.fi entry has placeholder copy, and `public/images/hero-noise.webp` stands in for its screenshot.
+- `public/images/service-design.webp` stands in for the Digital Marketing card image; `service-seo.svg` is a hand-drawn mockup.
 - Contact details (`hello@ealize.fi`, Helsinki) live in `Contact.tsx` / `Footer.tsx`.

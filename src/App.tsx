@@ -18,6 +18,7 @@ import Work from './components/Work';
 import Founders from './components/Founders';
 import Pricing from './components/Pricing';
 import Contact from './components/Contact';
+import Team from './components/Team';
 
 /** Jump to the top on route change, unless the URL targets an in-page anchor. */
 function ScrollToTop() {
@@ -59,7 +60,12 @@ export default function App() {
             />
             <Route
               path="/contact"
-              element={<CategoryPage title="Contact"><Contact /></CategoryPage>}
+              element={
+                <CategoryPage title="Contact">
+                  <Team />
+                  <Contact />
+                </CategoryPage>
+              }
             />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

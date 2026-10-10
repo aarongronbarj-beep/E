@@ -1,4 +1,5 @@
 import { Check } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Container, Eyebrow } from './primitives';
 import Reveal from './Reveal';
 
@@ -6,7 +7,7 @@ import Reveal from './Reveal';
 const PLANS = [
   {
     name: 'Website',
-    price: 'from €199',
+    price: 'from €399',
     note: '+ maintenance',
     desc: 'A clean, fast, professional site, planned, built, launched and hosted.',
     features: [
@@ -19,32 +20,31 @@ const PLANS = [
     cta: 'Start a project',
   },
   {
-    name: 'Website + Data',
-    price: 'from €199',
-    note: '+ €50 / month for analysis',
-    desc: 'Everything in Website, plus your tools and site visitor data combined into insight you can act on.',
+    name: 'Digital Marketing',
+    price: 'Monthly',
+    note: 'priced after a free call',
+    desc: 'Campaigns and SEO that bring the right people to your business, with the results reported every month.',
     features: [
-      'Everything in Website',
-      'Business tool integrations',
-      'Website visitor tracking',
-      'Monthly insight report',
+      'Campaign strategy',
+      'Google & social media ads',
+      'SEO & Google Business Profile',
+      'Monthly results report',
     ],
-    featured: true,
-    cta: 'Most popular',
+    featured: false,
+    cta: 'Get started',
   },
   {
     name: 'Full System',
     price: 'Custom',
-    desc: 'Everything in Website + Data, plus AI automation and analysis across all of your business data, in one dashboard.',
+    desc: 'Everything in Website and Digital Marketing, plus data analysis across all of your business data, in one dashboard.',
     features: [
-      'Everything in Website + Data',
-      'AI automation of recurring tasks',
-      'All your business data, not just the website',
+      'Everything in Website + Digital Marketing',
+      'Business tool integrations & visitor tracking',
       'Marketing, income, competitor analysis & forecasts',
       'Unified dashboard & priority support',
     ],
-    featured: false,
-    cta: 'Book a call',
+    featured: true,
+    cta: 'Most popular',
   },
 ];
 
@@ -113,8 +113,8 @@ export default function Pricing() {
                     </li>
                   ))}
                 </ul>
-                <a
-                  href="/contact"
+                <Link
+                  to="/contact"
                   className={`mt-8 inline-flex items-center justify-center rounded-[6px] px-5 py-3 text-sm font-medium transition-colors ${
                     p.featured
                       ? 'bg-white text-blue hover:bg-paper-2'
@@ -122,7 +122,7 @@ export default function Pricing() {
                   }`}
                 >
                   {p.featured ? 'Start a project' : p.cta}
-                </a>
+                </Link>
               </div>
             </Reveal>
           ))}

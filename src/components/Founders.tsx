@@ -24,7 +24,7 @@ export default function Founders() {
               <p className="mt-7 max-w-md font-body text-base leading-relaxed text-ink/65">
                 We're two 17-year-old founders from Helsinki on a mission to help
                 small businesses grow with better websites, clearer data and
-                smarter automation. No agency overhead, no jargon. Just modern
+                marketing that gets them found. No agency overhead, no jargon. Just modern
                 systems and people who actually care about your result.
               </p>
 

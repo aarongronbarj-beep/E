@@ -14,7 +14,7 @@ gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, useGSAP);
 const STOPS = [
   { label: 'Websites', note: 'A site built to convert, not just to exist.' },
   { label: 'Data', note: 'Analytics wired in from day one.' },
-  { label: 'Automation', note: 'The repetitive work stops being yours.' },
+  { label: 'Marketing', note: 'Campaigns and SEO that bring the right people in.' },
   { label: 'Growth', note: 'Decisions from numbers, not hunches.' },
 ];
 

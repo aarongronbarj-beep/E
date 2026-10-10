@@ -44,7 +44,7 @@ export default function Footer() {
               <Wordmark dark showMark={false} />
             </Link>
             <p className="mt-5 max-w-xs font-body text-sm leading-relaxed text-white/55">
-              Websites, data analytics and AI automation for small businesses.
+              Websites, data analysis, digital marketing and SEO for small businesses.
               Built in Helsinki, for all of Finland.
             </p>
           </div>

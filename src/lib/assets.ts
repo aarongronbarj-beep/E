@@ -27,7 +27,8 @@ export const IMG = {
   service: {
     websites: '/images/service-websites.webp',
     data: '/images/service-data.webp',
-    ai: '/images/service-ai.webp',
-    design: '/images/service-design.webp',
+    // Placeholder: the brand/ad board from the old design service.
+    marketing: '/images/service-design.webp',
+    seo: '/images/service-seo.svg',
   },
 };

@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react';
-import { Globe, BarChart3, Sparkles, PenTool } from 'lucide-react';
+import { Globe, BarChart3, Megaphone, Search } from 'lucide-react';
 import { IMG } from './assets';
 
 export type IconType = ComponentType<{ className?: string; strokeWidth?: number }>;
@@ -37,7 +37,7 @@ export const SERVICES: Service[] = [
     slug: 'websites',
     icon: Globe,
     img: IMG.service.websites,
-    title: 'Websites',
+    title: 'Website Development',
     body: 'Custom-built, fast and easy to manage, from first plan to launch and hosting.',
     intro:
       'Fast, professional websites that look great and get results, planned, designed, built, launched and hosted by us.',
@@ -149,7 +149,7 @@ export const SERVICES: Service[] = [
     slug: 'data-analytics',
     icon: BarChart3,
     img: IMG.service.data,
-    title: 'Data Analytics',
+    title: 'Data Analysis',
     body: 'We connect the tools you already use with visitor data from your site, turned into one clear, plain-language picture.',
     intro:
       'We plug into the tools your business already runs on and combine them with live visitor data from the website we build, then turn it all into plain-language insight you can act on.',
@@ -161,33 +161,33 @@ export const SERVICES: Service[] = [
     ],
   },
   {
-    slug: 'ai-automation',
-    icon: Sparkles,
-    img: IMG.service.ai,
-    title: 'AI Automation',
-    body: 'We automate the repetitive work that eats your week, so your time goes to customers.',
+    slug: 'digital-marketing',
+    icon: Megaphone,
+    img: IMG.service.marketing,
+    title: 'Digital Marketing',
+    body: 'Ads and content that put your business in front of the right people, measured so you know what each euro brings back.',
     intro:
-      'We find the repetitive work that eats your week and hand it off to AI, so your time goes to customers, not busywork.',
+      'We plan and run the campaigns that bring the right people to your business, and measure every one, so you know exactly what your marketing returns.',
     features: [
-      { slug: 'workflow-audit', title: 'Workflow audit', body: 'We map the recurring tasks quietly slowing your team down.', detail: '', bullets: [] },
-      { slug: 'custom-automations', title: 'Custom automations', body: 'AI workflows built around how your business actually runs.', detail: '', bullets: [] },
-      { slug: 'tools-connected', title: 'Tools connected', body: 'Your site, inbox and tools wired together into one flow.', detail: '', bullets: [] },
-      { slug: 'one-dashboard', title: 'One dashboard', body: 'Everything surfaced in a single place instead of scattered tabs.', detail: '', bullets: [] },
+      { slug: 'campaign-strategy', title: 'Campaign strategy', body: 'A clear plan for who to reach, where they are and what to tell them.', detail: '', bullets: [] },
+      { slug: 'paid-ads', title: 'Paid ads', body: 'Google and social media ads set up, run and tuned to what actually converts.', detail: '', bullets: [] },
+      { slug: 'social-content', title: 'Social media content', body: 'Posts and visuals that keep your business visible and on-brand.', detail: '', bullets: [] },
+      { slug: 'results-reporting', title: 'Results you can see', body: 'Every campaign tracked, so you see what brings in customers and what does not.', detail: '', bullets: [] },
     ],
   },
   {
-    slug: 'graphic-design',
-    icon: PenTool,
-    img: IMG.service.design,
-    title: 'Graphic Design',
-    body: 'Logos, animated ads, banners and full rebrands, sharp, on-brand visuals ready to ship.',
+    slug: 'seo',
+    icon: Search,
+    img: IMG.service.seo,
+    title: 'SEO',
+    body: 'Get found on Google by the people already searching for what you do.',
     intro:
-      'Logos, animated ads, banners and full rebrands, sharp, on-brand visuals ready to ship across every channel.',
+      'We make sure the people already searching for what you do find you first, on Google Search, on Maps and in local results.',
     features: [
-      { slug: 'logos-identity', title: 'Logos & identity', body: 'Distinctive marks, type and color systems people remember.', detail: '', bullets: [] },
-      { slug: 'animated-ads', title: 'Animated ads', body: 'Scroll-stopping motion ads for social and display that convert.', detail: '', bullets: [] },
-      { slug: 'banners-social', title: 'Banners & social', body: 'Campaign kits and templates you can roll out in minutes.', detail: '', bullets: [] },
-      { slug: 'rebranding', title: 'Rebranding', body: 'A fresh, modern identity for brands that have outgrown their look.', detail: '', bullets: [] },
+      { slug: 'keyword-research', title: 'Keyword research', body: 'We find the searches your customers actually type, and which ones you can win.', detail: '', bullets: [] },
+      { slug: 'on-page-seo', title: 'On-page optimisation', body: 'Titles, content, structure and speed tuned so Google understands every page.', detail: '', bullets: [] },
+      { slug: 'google-business-profile', title: 'Google Business Profile', body: 'Your profile set up and kept current, so you show up on Maps and in local searches.', detail: '', bullets: [] },
+      { slug: 'ranking-reports', title: 'Ranking reports', body: 'Regular reports on where you rank and how many people find you through search.', detail: '', bullets: [] },
     ],
   },
 ];

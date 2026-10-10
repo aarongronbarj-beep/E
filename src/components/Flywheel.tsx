@@ -10,12 +10,12 @@ const STEPS = [
   {
     n: '02',
     title: 'It starts collecting data',
-    body: 'Analytics and a chatbot capture how real customers actually behave.',
+    body: 'Analytics capture how real customers actually behave.',
   },
   {
     n: '03',
-    title: 'We automate the repetitive',
-    body: 'The patterns in that data reveal what to hand off to AI.',
+    title: 'We bring in the right people',
+    body: 'SEO and digital marketing, aimed by what the data shows works.',
   },
   {
     n: '04',

@@ -21,9 +21,9 @@ export default function Services() {
             Four things. <span className="text-blue">One solution.</span>
           </h2>
           <p className="mx-auto mt-6 max-w-lg font-body text-base leading-relaxed text-ink/60">
-            Websites that convert. Design that gets noticed. Data that tells you
-            what to do next. Automation that gives you your time back. Together,
-            not in separate silos.
+            Websites that convert. Data that tells you what to do next.
+            Marketing that reaches the right people. SEO that gets you found.
+            Together, not in separate silos.
           </p>
         </Reveal>
 
