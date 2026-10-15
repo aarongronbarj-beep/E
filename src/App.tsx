@@ -19,6 +19,12 @@ import Founders from './components/Founders';
 import Pricing from './components/Pricing';
 import Contact from './components/Contact';
 import Team from './components/Team';
+import { useCopy } from './lib/i18n';
+
+const TITLES = {
+  fi: { services: 'Palvelut', work: 'Työt', about: 'Meistä', pricing: 'Hinnasto', contact: 'Yhteystiedot' },
+  en: { services: 'Services', work: 'Work', about: 'About', pricing: 'Pricing', contact: 'Contact' },
+};
 
 /** Jump to the top on route change, unless the URL targets an in-page anchor. */
 function ScrollToTop() {
@@ -32,6 +38,7 @@ function ScrollToTop() {
 
 export default function App() {
   useSmoothScroll();
+  const t = useCopy(TITLES);
   return (
     <BrowserRouter>
       <ScrollToTop />
@@ -42,26 +49,26 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route
               path="/services"
-              element={<CategoryPage title="Services"><Services /></CategoryPage>}
+              element={<CategoryPage title={t.services}><Services /></CategoryPage>}
             />
             <Route path="/services/:slug" element={<ServiceDetail />} />
             <Route
               path="/work"
-              element={<CategoryPage title="Work"><Work /></CategoryPage>}
+              element={<CategoryPage title={t.work}><Work /></CategoryPage>}
             />
             <Route path="/work/:slug" element={<ProjectDetail />} />
             <Route
               path="/about"
-              element={<CategoryPage title="About"><Founders /></CategoryPage>}
+              element={<CategoryPage title={t.about}><Founders /></CategoryPage>}
             />
             <Route
               path="/pricing"
-              element={<CategoryPage title="Pricing"><Pricing /></CategoryPage>}
+              element={<CategoryPage title={t.pricing}><Pricing /></CategoryPage>}
             />
             <Route
               path="/contact"
               element={
-                <CategoryPage title="Contact">
+                <CategoryPage title={t.contact}>
                   <Team />
                   <Contact />
                 </CategoryPage>

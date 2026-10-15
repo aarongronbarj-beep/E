@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react';
 import { Globe, BarChart3, Megaphone, Search } from 'lucide-react';
 import { IMG } from './assets';
+import { useLang, type Lang } from './i18n';
 
 export type IconType = ComponentType<{ className?: string; strokeWidth?: number }>;
 
@@ -27,12 +28,7 @@ export type Service = {
   features: Feature[];
 };
 
-export const getFeature = (serviceSlug?: string, featureSlug?: string) =>
-  SERVICES.find((s) => s.slug === serviceSlug)?.features.find(
-    (f) => f.slug === featureSlug,
-  );
-
-export const SERVICES: Service[] = [
+const EN: Service[] = [
   {
     slug: 'websites',
     icon: Globe,
@@ -192,5 +188,173 @@ export const SERVICES: Service[] = [
   },
 ];
 
-export const getService = (slug?: string): Service | undefined =>
-  SERVICES.find((s) => s.slug === slug);
+const FI: Service[] = [
+  {
+    slug: 'websites',
+    icon: Globe,
+    img: IMG.service.websites,
+    title: 'Verkkosivut',
+    body: 'Räätälöidyt, nopeat ja helppohoitoiset sivut suunnittelusta julkaisuun ja ylläpitoon.',
+    intro:
+      'Nopeat ja ammattimaiset verkkosivut, jotka näyttävät hyvältä ja tuovat tulosta. Me suunnittelemme, toteutamme, julkaisemme ja ylläpidämme ne.',
+    features: [
+      {
+        slug: 'custom-design',
+        title: 'Räätälöity ulkoasu',
+        body: 'Mobiili edellä suunnitellut sivut brändisi ympärille, ei valmispohjia.',
+        img: '/images/feature-custom-design.png',
+        detail:
+          'Jokainen yksityiskohta rakennetaan brändisi ja asiakkaidesi tarpeiden ympärille. Aloitamme tyhjästä, ilman valmispohjia ja oikoteitä, jotta sivusi näyttävät sinulta eivätkä keneltäkään muulta. Ensimmäisestä luonnoksesta viimeiseen viimeistelyyn sivut suunnitellaan tuntumaan omiltasi ja toimimaan moitteetta jokaisella näytöllä.',
+        bullets: [
+          {
+            heading: 'Brändin kartoitus',
+            text: 'Perehdymme identiteettiisi, arvoihisi ja kohderyhmääsi ennen kuin piirrämme ensimmäistäkään näkymää.',
+          },
+          {
+            heading: 'Mobiili edellä',
+            text: 'Jokainen asettelu suunnitellaan ensin pienimmälle näytölle ja laajennetaan siitä, joten se toimii kaikkialla.',
+          },
+          {
+            heading: 'Typografia ja värit',
+            text: 'Fonttisi, värisi ja visuaalinen ilmeesi toteutettuna tarkasti ja johdonmukaisesti.',
+          },
+          {
+            heading: 'Omat asettelut',
+            text: 'Kävijää ohjaavat sivurakenteet, joita ei ole lainattu teemakirjastosta.',
+          },
+        ],
+      },
+      {
+        slug: 'built-to-convert',
+        title: 'Rakennettu myymään',
+        body: 'Selkeä rakenne ja tekstit, jotka muuttavat kävijät yhteydenotoiksi.',
+        detail:
+          'Kaunis sivusto, joka ei tuo yhteydenottoja, on hukattu mahdollisuus. Suunnittelemme konversiot mielessä ensimmäisestä luonnoksesta asti: selkeä hierarkia, vakuuttavat tekstit ja toimintakehotteet juuri oikeissa paikoissa.',
+        bullets: [
+          {
+            heading: 'Selkeä hierarkia',
+            text: 'Kävijä näkee heti, mitä teet, kenelle ja mitä hänen kannattaa tehdä seuraavaksi.',
+          },
+          {
+            heading: 'Harkitut toimintakehotteet',
+            text: 'Jokaisella sivulla on yksi selkeä toiminto, johon kävijää ohjataan.',
+          },
+          {
+            heading: 'Vakuuttavat tekstit',
+            text: 'Viestit, jotka vastaavat epäilyihin ja rakentavat luottamusta ennen pyyntöä.',
+          },
+          {
+            heading: 'Sujuva yhteydenotto',
+            text: 'Lomakkeet ja yhteydenottokohdat, jotka tuntuvat vaivattomilta.',
+          },
+        ],
+      },
+      {
+        slug: 'seo-foundations',
+        title: 'Hakukoneoptimoinnin perusta',
+        body: 'Siisti koodi, nopea latautuminen ja hakukoneoptimointi alusta asti.',
+        detail:
+          'Rakennamme jokaisen sivuston hakukoneet huomioiden ensimmäisestä päivästä lähtien. Siisti koodi, nopea latautuminen ja oikea sivurakenne tarkoittavat, että sivustosi on valmis nousemaan hakutuloksissa jo ennen ensimmäistä julkaisua.',
+        bullets: [
+          {
+            heading: 'Siisti koodi',
+            text: 'Semanttista HTML:ää, jota hakukoneet lukevat ja ymmärtävät helposti.',
+          },
+          {
+            heading: 'Sivunopeus',
+            text: 'Optimoidut kuvat, vähän JavaScriptiä ja nopea palvelin parhaisiin Core Web Vitals -tuloksiin.',
+          },
+          {
+            heading: 'Sivukohtainen SEO',
+            text: 'Otsikot, kuvaukset, otsikkorakenne ja strukturoitu data kunnossa.',
+          },
+          {
+            heading: 'Indeksoitava rakenne',
+            text: 'Looginen sivukartta, sisäinen linkitys ja kanoniset osoitteet alusta asti.',
+          },
+        ],
+      },
+      {
+        slug: 'hosting-care',
+        title: 'Ylläpito ja huolenpito',
+        body: 'Verkkotunnus, palvelin ja päivitykset hoidettuina, ettei sinun tarvitse huolehtia.',
+        detail:
+          'Kun sivustosi on julkaistu, sinun ei tarvitse ajatella sitä. Hoidamme verkkotunnuksen, palvelimen, tietoturvapäivitykset ja sisältömuutokset, jotta voit keskittyä yrityksesi pyörittämiseen.',
+        bullets: [
+          {
+            heading: 'Hallinnoitu palvelin',
+            text: 'Nopeat ja luotettavat palvelimet sekä käytettävyyden valvonta.',
+          },
+          {
+            heading: 'Verkkotunnuksen hallinta',
+            text: 'Rekisteröimme ja uusimme verkkotunnuksesi, ettei se pääse vahingossa vanhenemaan.',
+          },
+          {
+            heading: 'Tietoturvapäivitykset',
+            text: 'Julkaisujärjestelmän ja lisäosien päivitykset ennen kuin niistä tulee haavoittuvuuksia.',
+          },
+          {
+            heading: 'Sisältömuutokset',
+            text: 'Pienet teksti- ja kuvamuutokset hoidamme nopeasti, ilman tukipyyntöjonoa.',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'data-analytics',
+    icon: BarChart3,
+    img: IMG.service.data,
+    title: 'Data-analyysi',
+    body: 'Yhdistämme jo käyttämäsi työkalut sivustosi kävijädataan yhdeksi selkeäksi kokonaiskuvaksi.',
+    intro:
+      'Liitämme yhteen työkalut, joilla yrityksesi jo toimii, ja yhdistämme ne rakentamamme sivuston reaaliaikaiseen kävijädataan. Lopputulos on selkokielistä tietoa, jonka pohjalta voit toimia.',
+    features: [
+      { slug: 'tool-integrations', title: 'Työkalujen integraatiot', body: 'Yhdistämme CRM:n, kassajärjestelmän, sähköpostin, mainonnan ja kirjanpidon, jotta kaikki data on yhdessä paikassa.', detail: '', bullets: [] },
+      { slug: 'visitor-data', title: 'Sivuston kävijädata', body: 'Jokainen rakentamamme sivusto kerää todellista kävijäkäyttäytymistä: mistä ihmiset tulevat ja mitä he tekevät.', detail: '', bullets: [] },
+      { slug: 'unified-view', title: 'Yksi yhtenäinen näkymä', body: 'Liiketoiminnan työkalut ja sivuston analytiikka yhdessä, jotta näet koko asiakaspolun etkä irrallisia palasia.', detail: '', bullets: [] },
+      { slug: 'insight', title: 'Tietoa, jonka pohjalta toimia', body: 'Selkeät ja selkokieliset raportit, jotka kertovat mitä tehdä seuraavaksi, eivät pelkkiä kaavioita.', detail: '', bullets: [] },
+    ],
+  },
+  {
+    slug: 'digital-marketing',
+    icon: Megaphone,
+    img: IMG.service.marketing,
+    title: 'Digitaalinen markkinointi',
+    body: 'Mainontaa ja sisältöä, jotka tuovat yrityksesi oikeiden ihmisten eteen. Mitattuna, jotta tiedät mitä jokainen euro tuottaa.',
+    intro:
+      'Suunnittelemme ja toteutamme kampanjat, jotka tuovat oikeat ihmiset yritykseesi, ja mittaamme jokaisen, jotta tiedät tarkalleen mitä markkinointisi tuottaa.',
+    features: [
+      { slug: 'campaign-strategy', title: 'Kampanjastrategia', body: 'Selkeä suunnitelma siitä, keitä tavoitellaan, missä he ovat ja mitä heille kerrotaan.', detail: '', bullets: [] },
+      { slug: 'paid-ads', title: 'Maksettu mainonta', body: 'Google- ja somemainokset pystytettyinä, ajettuina ja hiottuina sen mukaan, mikä oikeasti tuottaa.', detail: '', bullets: [] },
+      { slug: 'social-content', title: 'Somesisältö', body: 'Julkaisuja ja visuaaleja, jotka pitävät yrityksesi näkyvillä ja brändin mukaisena.', detail: '', bullets: [] },
+      { slug: 'results-reporting', title: 'Näkyvät tulokset', body: 'Jokaista kampanjaa seurataan, joten näet mikä tuo asiakkaita ja mikä ei.', detail: '', bullets: [] },
+    ],
+  },
+  {
+    slug: 'seo',
+    icon: Search,
+    img: IMG.service.seo,
+    title: 'Hakukoneoptimointi',
+    body: 'Löydy Googlesta niille, jotka jo etsivät sitä, mitä teet.',
+    intro:
+      'Varmistamme, että ihmiset, jotka jo etsivät palveluitasi, löytävät sinut ensimmäisenä: Google-haussa, Mapsissa ja paikallisissa hakutuloksissa.',
+    features: [
+      { slug: 'keyword-research', title: 'Avainsanatutkimus', body: 'Selvitämme hakusanat, joita asiakkaasi oikeasti käyttävät, ja ne joissa voit voittaa.', detail: '', bullets: [] },
+      { slug: 'on-page-seo', title: 'Sivujen optimointi', body: 'Otsikot, sisältö, rakenne ja nopeus kuntoon, jotta Google ymmärtää jokaisen sivun.', detail: '', bullets: [] },
+      { slug: 'google-business-profile', title: 'Google-yritysprofiili', body: 'Profiilisi perustettuna ja ajan tasalla, jotta näyt Mapsissa ja paikallisissa hauissa.', detail: '', bullets: [] },
+      { slug: 'ranking-reports', title: 'Sijoitusraportit', body: 'Säännölliset raportit sijoituksistasi ja siitä, kuinka moni löytää sinut haun kautta.', detail: '', bullets: [] },
+    ],
+  },
+];
+
+export const SERVICES: Record<Lang, Service[]> = { fi: FI, en: EN };
+
+/** The service list in the visitor's language. */
+export const useServices = () => SERVICES[useLang().lang];
+
+export const findService = (services: Service[], slug?: string): Service | undefined =>
+  services.find((s) => s.slug === slug);
+
+export const findFeature = (services: Service[], serviceSlug?: string, featureSlug?: string) =>
+  findService(services, serviceSlug)?.features.find((f) => f.slug === featureSlug);

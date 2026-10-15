@@ -1,10 +1,11 @@
 import { ArrowUpRight, Mail, Phone } from 'lucide-react';
 import { Container, Eyebrow } from './primitives';
 import Reveal from './Reveal';
+import { useCopy } from '../lib/i18n';
 
 type Person = {
   name: string;
-  role: string;
+  role: 'founder';
   /** Portrait in public/images. Without one, the card shows initials. */
   photo?: string;
   email?: string;
@@ -15,9 +16,26 @@ type Person = {
 // Personal emails, phone numbers, LinkedIn links and photos go here; each
 // one appears on the card as soon as it is filled in.
 const PEOPLE: Person[] = [
-  { name: 'Lauri Parviainen', role: 'Co-founder', email: 'hello@ealize.fi' },
-  { name: 'Aaron Grönbarj', role: 'Co-founder', email: 'hello@ealize.fi' },
+  { name: 'Lauri Parviainen', role: 'founder', email: 'hello@ealize.fi' },
+  { name: 'Aaron Grönbarj', role: 'founder', email: 'hello@ealize.fi' },
 ];
+
+const COPY = {
+  fi: {
+    eyebrow: 'Yhteystiedot',
+    title: 'Puhu meille',
+    accent: 'suoraan.',
+    body: 'Ei myyntitiimiä, ei tukijonoa. Tavoitat suoraan ne kaksi ihmistä, jotka suunnittelevat ja rakentavat projektisi.',
+    roles: { founder: 'Perustaja' },
+  },
+  en: {
+    eyebrow: 'Contact',
+    title: 'Talk to us',
+    accent: 'directly.',
+    body: 'No sales team, no ticket queue. You reach the two people who plan and build your project.',
+    roles: { founder: 'Co-founder' },
+  },
+};
 
 const initials = (name: string) =>
   name
@@ -29,17 +47,17 @@ const rowClass =
   'inline-flex items-center gap-3 font-body text-sm text-ink/70 transition-colors hover:text-blue';
 
 export default function Team() {
+  const t = useCopy(COPY);
   return (
     <section className="border-b border-line bg-paper py-20 md:py-28">
       <Container>
         <Reveal className="max-w-2xl">
-          <Eyebrow>Contact</Eyebrow>
+          <Eyebrow>{t.eyebrow}</Eyebrow>
           <h1 className="poster mt-6 text-[clamp(2.25rem,5vw,3.5rem)] text-ink">
-            Talk to us <span className="text-blue">directly.</span>
+            {t.title} <span className="text-blue">{t.accent}</span>
           </h1>
           <p className="mt-6 max-w-lg font-body text-base leading-relaxed text-ink/60">
-            No sales team, no ticket queue. You reach the two people who
-            plan and build your project.
+            {t.body}
           </p>
         </Reveal>
 
@@ -66,7 +84,7 @@ export default function Team() {
                     <h2 className="font-heading text-2xl font-semibold text-ink">
                       {p.name}
                     </h2>
-                    <p className="mt-1 font-body text-sm text-ink/55">{p.role}</p>
+                    <p className="mt-1 font-body text-sm text-ink/55">{t.roles[p.role]}</p>
                   </div>
                 </div>
 

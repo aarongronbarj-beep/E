@@ -16,6 +16,16 @@ export const IMG = {
   // typography: /images/art-seam.webp
   artSeam: '/images/art-seam-poster.webp',
   dataWave: '/images/data-wave.webp',
+  // Same laptop and Google search: a competitor ranks first, then the client.
+  // Shown as a before/after slider in the home page's "result" block.
+  result: {
+    before: '/images/result-before.jpg',
+    after: '/images/result-after.jpg',
+  },
+  // Client logos for testimonials.
+  clients: {
+    kokkoma: '/images/client-kokkoma-logo.png',
+  },
   work: {
     kokkoma: '/images/work-kokkoma.jpg',
     // Placeholder: replace with a screenshot of the Kesäyrittäjät.fi site.

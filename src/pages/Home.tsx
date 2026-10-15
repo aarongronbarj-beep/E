@@ -1,7 +1,8 @@
 import ArtSeam from '../components/ArtSeam';
 import Panel from '../components/Panel';
 import Hero from '../components/Hero';
-import Path from '../components/Path';
+import Testimonial from '../components/Testimonial';
+import Story from '../components/Story';
 import Flywheel from '../components/Flywheel';
 import DarkSignal from '../components/DarkSignal';
 
@@ -18,12 +19,11 @@ export default function Home() {
 
       <ArtSeam />
 
-      {/* Left out of Panel on purpose. Panel animates a transform on its
-          wrapper while scrolling, and ScrollTrigger measures its start and end
-          against the document — a moving transformed ancestor is a known way
-          to make those two disagree. Not the cause of any bug seen here, just
-          not worth stacking two scroll systems on the same element. */}
-      <Path />
+      <Testimonial />
+
+      {/* Outside Panel: Panel transforms its wrapper while scrolling, which
+          would fight the pinned column in the process steps. */}
+      <Story />
 
       <Panel>
         <Flywheel />

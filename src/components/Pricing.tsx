@@ -2,9 +2,20 @@ import { Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Container, Eyebrow } from './primitives';
 import Reveal from './Reveal';
+import { useCopy } from '../lib/i18n';
+
+type Plan = {
+  name: string;
+  price: string;
+  note?: string;
+  desc: string;
+  features: string[];
+  featured: boolean;
+  cta: string;
+};
 
 /* NOTE: prices are editable placeholders. Adjust to your real rates. */
-const PLANS = [
+const PLANS_EN: Plan[] = [
   {
     name: 'Website',
     price: 'from €399',
@@ -48,23 +59,86 @@ const PLANS = [
   },
 ];
 
+const PLANS_FI: Plan[] = [
+  {
+    name: 'Verkkosivut',
+    price: 'alk. 399 €',
+    note: '+ ylläpito',
+    desc: 'Siistit, nopeat ja ammattimaiset sivut suunniteltuina, toteutettuina, julkaistuina ja ylläpidettyinä.',
+    features: [
+      'Räätälöity ulkoasu, mobiili edellä',
+      'Tekstit ja hakukoneoptimoinnin perusteet',
+      'Palvelin ja verkkotunnus valmiiksi',
+      'Jatkuva ylläpito saatavilla',
+    ],
+    featured: false,
+    cta: 'Aloita projekti',
+  },
+  {
+    name: 'Digitaalinen markkinointi',
+    price: 'Kuukausittain',
+    note: 'hinta ilmaisen puhelun jälkeen',
+    desc: 'Kampanjat ja hakukoneoptimointi, jotka tuovat oikeat ihmiset yritykseesi, ja tulokset raportoituna joka kuukausi.',
+    features: [
+      'Kampanjastrategia',
+      'Google- ja somemainonta',
+      'Hakukoneoptimointi ja Google-yritysprofiili',
+      'Kuukausittainen tulosraportti',
+    ],
+    featured: false,
+    cta: 'Aloitetaan',
+  },
+  {
+    name: 'Kokonaisratkaisu',
+    price: 'Räätälöity',
+    desc: 'Kaikki Verkkosivut- ja Digitaalinen markkinointi -paketeista sekä data-analyysi koko yrityksesi datasta yhdessä näkymässä.',
+    features: [
+      'Kaikki Verkkosivut + Digitaalinen markkinointi -paketeista',
+      'Liiketoiminnan työkalujen integraatiot ja kävijäseuranta',
+      'Markkinointi-, tulo- ja kilpailija-analyysi sekä ennusteet',
+      'Yhtenäinen näkymä ja ensisijainen tuki',
+    ],
+    featured: true,
+    cta: 'Suosituin',
+  },
+];
+
+const COPY = {
+  fi: {
+    plans: PLANS_FI,
+    eyebrow: 'Hinnasto',
+    title: 'Läpinäkyvä. Ei yllätyksiä.',
+    body: 'Aloita pienesti verkkosivuilla tai mene suoraan kokonaisratkaisuun. Jokainen paketti on kiinteä ja rehellinen tarjous ilmaisen puhelun jälkeen. Ei toimiston yleiskuluja.',
+    popular: 'Suosittu',
+    start: 'Aloita projekti',
+  },
+  en: {
+    plans: PLANS_EN,
+    eyebrow: 'Pricing',
+    title: 'Transparent. No surprises.',
+    body: 'Start small with a website, or go all the way to a full system. Every plan is a fixed, honest quote after a free call. No agency overhead.',
+    popular: 'Popular',
+    start: 'Start a project',
+  },
+};
+
 export default function Pricing() {
+  const t = useCopy(COPY);
   return (
     <section id="pricing" className="border-y border-line bg-paper py-24 md:py-32">
       <Container>
         <Reveal className="max-w-2xl">
-          <Eyebrow>Pricing</Eyebrow>
+          <Eyebrow>{t.eyebrow}</Eyebrow>
           <h2 className="poster mt-6 text-[clamp(2.25rem,5vw,3.5rem)] text-ink">
-            Transparent. No surprises.
+            {t.title}
           </h2>
           <p className="mt-6 font-body text-base leading-relaxed text-ink/60">
-            Start small with a website, or go all the way to a full system. Every
-            plan is a fixed, honest quote after a free call. No agency overhead.
+            {t.body}
           </p>
         </Reveal>
 
         <div className="mt-14 grid gap-6 md:grid-cols-3">
-          {PLANS.map((p, i) => (
+          {t.plans.map((p, i) => (
             <Reveal key={p.name} delay={i * 0.08}>
               <div
                 className={`flex h-full flex-col rounded-2xl border p-8 ${
@@ -77,7 +151,7 @@ export default function Pricing() {
                   <h3 className="font-heading text-lg font-semibold">{p.name}</h3>
                   {p.featured && (
                     <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-medium">
-                      Popular
+                      {t.popular}
                     </span>
                   )}
                 </div>
@@ -121,7 +195,7 @@ export default function Pricing() {
                       : 'bg-blue text-white hover:bg-blue-600'
                   }`}
                 >
-                  {p.featured ? 'Start a project' : p.cta}
+                  {p.featured ? t.start : p.cta}
                 </Link>
               </div>
             </Reveal>

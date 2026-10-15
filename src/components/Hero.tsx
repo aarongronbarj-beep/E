@@ -1,10 +1,15 @@
 import { motion } from 'motion/react';
 import GlitchLines from './GlitchText';
 import GlitchButton from './GlitchButton';
+import GradientWord from './GradientWord';
 import { reveal, useStatic } from '../lib/motion';
 import { IMG } from '../lib/assets';
+import { useCopy } from '../lib/i18n';
 
-const POSTER = ['Nettisivut', 'jotka', 'tekevät', 'tulosta'];
+const COPY = {
+  fi: { poster: ['Nettisivut', 'jotka', 'tekevät', 'tulosta'], cta: 'Varaa ilmainen puhelu' },
+  en: { poster: ['Websites', 'that', 'deliver', 'results'], cta: 'Book a free call' },
+};
 
 /** Figma "Hero card" (Ealize – Etusivu, node 2:15), drawn on a 1440×820 frame.
  *  From md up every position is a multiple of `--u` (1 unit = 14.4 design px).
@@ -24,6 +29,7 @@ const stripeMask = {
 
 export default function Hero() {
   const isStatic = useStatic();
+  const t = useCopy(COPY);
   const fadeProps = (delay: number) => ({
     variants: reveal,
     initial: isStatic ? false : ('hidden' as const),
@@ -56,9 +62,13 @@ export default function Hero() {
           <h1 className="poster text-[clamp(3rem,13vw,5rem)] text-ink md:absolute md:left-[calc(var(--u)*6.597)] md:top-[calc(var(--u)*6.111)] md:w-[calc(var(--u)*44.236)] md:text-[calc(var(--u)*7.222)]">
             <GlitchLines
               delay={0.15}
-              lines={POSTER.map((w, i) => (
-                <span key={i}>{w}</span>
-              ))}
+              lines={t.poster.map((w, i) =>
+                i === t.poster.length - 1 ? (
+                  <GradientWord key={i}>{w}</GradientWord>
+                ) : (
+                  <span key={i}>{w}</span>
+                ),
+              )}
             />
           </h1>
 
@@ -78,7 +88,7 @@ export default function Hero() {
           </motion.div>
 
           <motion.div {...fadeProps(0.55)} className="md:absolute md:left-[calc(var(--u)*6.597)] md:top-[calc(var(--u)*47.361)]">
-            <GlitchButton href="/contact" label="Book a free call" />
+            <GlitchButton href="/contact" label={t.cta} />
           </motion.div>
         </div>
       </div>

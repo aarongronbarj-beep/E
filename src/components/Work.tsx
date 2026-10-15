@@ -7,21 +7,41 @@ import { useGSAP } from '@gsap/react';
 import { Container, Eyebrow } from './primitives';
 import Reveal from './Reveal';
 import { useStatic } from '../lib/motion';
-import { PROJECTS } from '../lib/projects';
+import { useProjects } from '../lib/projects';
+import { useCopy } from '../lib/i18n';
 
 gsap.registerPlugin(Flip, useGSAP);
 
-/** Filter labels, derived from the tags rather than hand-listed, so adding a
- *  project with a new discipline adds its filter automatically. */
-const FILTERS = [
-  'All',
-  ...Array.from(new Set(PROJECTS.flatMap((p) => p.tag.split(' & ')))),
-];
+const COPY = {
+  fi: {
+    all: 'Kaikki',
+    eyebrow: 'Viimeisimmät työt',
+    title: ['Tehty yrityksille', 'ympäri Suomen.'],
+    cta: 'Aloita projektisi',
+  },
+  en: {
+    all: 'All',
+    eyebrow: 'Recent work',
+    title: ['Built for businesses', 'across Finland.'],
+    cta: 'Start your project',
+  },
+};
 
 export default function Work() {
   const isStatic = useStatic();
+  const t = useCopy(COPY);
+  const projects = useProjects();
+  /** Filter labels, derived from the tags rather than hand-listed, so adding a
+   *  project with a new discipline adds its filter automatically. */
+  const filters = [
+    t.all,
+    ...Array.from(new Set(projects.flatMap((p) => p.tag.split(' & ')))),
+  ];
   const grid = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState('All');
+  const [chosen, setActive] = useState('');
+  // Labels change with the language, so a filter picked in the other language
+  // (or none yet) falls back to showing everything.
+  const active = filters.includes(chosen) ? chosen : t.all;
   /** Layout captured the instant before React re-renders the grid. */
   const snapshot = useRef<Flip.FlipState | null>(null);
 
@@ -65,30 +85,30 @@ export default function Work() {
     { dependencies: [active], scope: grid },
   );
 
-  const shows = (tag: string) => active === 'All' || tag.includes(active);
+  const shows = (tag: string) => active === t.all || tag.includes(active);
 
   return (
     <section id="work" className="border-b border-line bg-paper py-24 md:py-32">
       <Container>
         <Reveal className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <Eyebrow>Recent work</Eyebrow>
+            <Eyebrow>{t.eyebrow}</Eyebrow>
             <h2 className="poster mt-6 text-[clamp(2.25rem,5vw,3.5rem)] text-ink">
-              Built for businesses
-              <br className="hidden md:block" /> across Finland.
+              {t.title[0]}
+              <br className="hidden md:block" /> {t.title[1]}
             </h2>
           </div>
           <Link
             to="/contact"
             className="group inline-flex items-center gap-2 font-body text-sm text-ink/70 transition-colors hover:text-blue"
           >
-            Start your project
+            {t.cta}
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
         </Reveal>
 
         <Reveal className="mt-10 flex flex-wrap gap-2" delay={0.06}>
-          {FILTERS.map((f) => (
+          {filters.map((f) => (
             <button
               key={f}
               type="button"
@@ -109,7 +129,7 @@ export default function Work() {
           ref={grid}
           className="mt-10 grid gap-6 sm:grid-cols-2"
         >
-          {PROJECTS.map((p, i) => (
+          {projects.map((p, i) => (
             // Cards stay mounted and are hidden with `display: none` rather
             // than unmounted, so Flip can measure them on both sides of the
             // change and drive its own enter/leave.

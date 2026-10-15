@@ -1,13 +1,47 @@
 import { useEffect } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
-import { ArrowLeft, ArrowUpRight } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Check } from 'lucide-react';
 import { Container, Eyebrow, Button } from '../components/primitives';
 import Reveal from '../components/Reveal';
-import { getProject, PROJECTS } from '../lib/projects';
+import { findProject, useProjects } from '../lib/projects';
+import { useCopy } from '../lib/i18n';
+
+const COPY = {
+  fi: {
+    back: 'Kaikki työt',
+    visit: 'Vieraile sivustolla',
+    challenge: 'Haaste',
+    did: 'Mitä teimme',
+    delivered: 'Toimitettu',
+    builtPre: 'Mitä',
+    builtAccent: 'rakensimme.',
+    moreEyebrow: 'Tutustu lisää',
+    moreTitle: 'Lisää töitä.',
+    ctaTitle: 'Haluatko vastaavia tuloksia?',
+    ctaBody: 'Varaa ilmainen 15 minuutin puhelu, niin kerromme tarkalleen, mitä yrityksesi tarvitsee. Ei sitoumuksia, ei painostusta.',
+    call: 'Varaa ilmainen puhelu',
+  },
+  en: {
+    back: 'All work',
+    visit: 'Visit the site',
+    challenge: 'The challenge',
+    did: 'What we did',
+    delivered: 'Delivered',
+    builtPre: 'What we',
+    builtAccent: 'built.',
+    moreEyebrow: 'Keep exploring',
+    moreTitle: 'More work.',
+    ctaTitle: 'Want results like this?',
+    ctaBody: "Book a free 15-minute call and we'll tell you exactly what your business needs. No commitment, no pressure.",
+    call: 'Book a free call',
+  },
+};
 
 export default function ProjectDetail() {
   const { slug } = useParams();
-  const project = getProject(slug);
+  const t = useCopy(COPY);
+  const projects = useProjects();
+  const project = findProject(projects, slug);
 
   useEffect(() => {
     if (project) document.title = `${project.name} — Ealize`;
@@ -18,7 +52,7 @@ export default function ProjectDetail() {
 
   if (!project) return <Navigate to="/work" replace />;
 
-  const others = PROJECTS.filter((p) => p.slug !== project.slug);
+  const others = projects.filter((p) => p.slug !== project.slug);
 
   return (
     <>
@@ -31,7 +65,7 @@ export default function ProjectDetail() {
               className="group inline-flex items-center gap-2 font-body text-sm text-ink/60 transition-colors hover:text-blue"
             >
               <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
-              All work
+              {t.back}
             </Link>
 
             <div className="mt-8">
@@ -39,6 +73,7 @@ export default function ProjectDetail() {
             </div>
             <h1 className="poster mt-5 text-[clamp(2.5rem,6vw,4.25rem)] text-ink">
               {project.name}
+              <span className="text-blue">.</span>
             </h1>
             <p className="mt-6 font-body text-lg leading-relaxed text-ink/65">
               {project.summary}
@@ -47,7 +82,7 @@ export default function ProjectDetail() {
             {project.url && (
               <div className="mt-9">
                 <Button href={project.url}>
-                  Visit the site
+                  {t.visit}
                   <ArrowUpRight className="h-4 w-4" />
                 </Button>
               </div>
@@ -66,6 +101,28 @@ export default function ProjectDetail() {
         </Container>
       </section>
 
+      {/* Results band */}
+      {project.highlights && (
+        <section className="bg-blue py-16 md:py-20">
+          <Container>
+            <div className="grid gap-10 sm:grid-cols-3">
+              {project.highlights.map((h, i) => (
+                <Reveal key={h.label} delay={i * 0.08}>
+                  <div className="border-l border-white/25 pl-6">
+                    <div className="poster text-[clamp(2.5rem,5vw,3.75rem)] text-white">
+                      {h.value}
+                    </div>
+                    <p className="mt-3 max-w-[16rem] font-body text-sm leading-relaxed text-white/75">
+                      {h.label}
+                    </p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </Container>
+        </section>
+      )}
+
       {/* Facts + story */}
       <section className="border-b border-line bg-paper py-24 md:py-32">
         <Container>
@@ -75,7 +132,13 @@ export default function ProjectDetail() {
                 {project.facts.map((f) => (
                   <div key={f.label} className="py-5">
                     <dt className="eyebrow text-ink/45">{f.label}</dt>
-                    <dd className="mt-2 font-body text-base text-ink">{f.value}</dd>
+                    <dd
+                      className={`mt-2 font-body text-base ${
+                        f.accent ? 'font-semibold text-blue' : 'text-ink'
+                      }`}
+                    >
+                      {f.value}
+                    </dd>
                   </div>
                 ))}
               </dl>
@@ -83,13 +146,13 @@ export default function ProjectDetail() {
 
             <div className="flex flex-col gap-14 lg:col-span-7 lg:col-start-6">
               <Reveal>
-                <Eyebrow>The challenge</Eyebrow>
+                <Eyebrow>{t.challenge}</Eyebrow>
                 <p className="mt-5 font-body text-lg leading-relaxed text-ink/70">
                   {project.challenge}
                 </p>
               </Reveal>
               <Reveal>
-                <Eyebrow>What we did</Eyebrow>
+                <Eyebrow>{t.did}</Eyebrow>
                 <p className="mt-5 font-body text-lg leading-relaxed text-ink/70">
                   {project.solution}
                 </p>
@@ -103,9 +166,9 @@ export default function ProjectDetail() {
       <section className="border-b border-line bg-paper py-24 md:py-32">
         <Container>
           <Reveal className="max-w-2xl">
-            <Eyebrow>Delivered</Eyebrow>
+            <Eyebrow>{t.delivered}</Eyebrow>
             <h2 className="poster mt-6 text-[clamp(2rem,4.5vw,3rem)] text-ink">
-              What we built.
+              {t.builtPre} <span className="text-blue">{t.builtAccent}</span>
             </h2>
           </Reveal>
 
@@ -113,7 +176,7 @@ export default function ProjectDetail() {
             {project.delivered.map((d, i) => (
               <Reveal key={d.title} y={40}>
                 <div className="flex items-start gap-8 py-10 md:gap-16 md:py-14">
-                  <span className="mt-1 shrink-0 font-heading text-sm font-semibold tabular-nums text-ink/25">
+                  <span className="mt-1 shrink-0 font-heading text-sm font-semibold tabular-nums text-blue">
                     0{i + 1}
                   </span>
                   <div className="flex-1">
@@ -124,6 +187,7 @@ export default function ProjectDetail() {
                       {d.text}
                     </p>
                   </div>
+                  <Check className="mt-1.5 h-5 w-5 shrink-0 text-blue" strokeWidth={2.5} />
                 </div>
               </Reveal>
             ))}
@@ -136,9 +200,9 @@ export default function ProjectDetail() {
         <section className="border-b border-line bg-paper-2 py-24 md:py-32">
           <Container>
             <Reveal>
-              <Eyebrow>Keep exploring</Eyebrow>
+              <Eyebrow>{t.moreEyebrow}</Eyebrow>
               <h2 className="poster mt-6 text-[clamp(2rem,4.5vw,3rem)] text-ink">
-                More work.
+                {t.moreTitle}
               </h2>
             </Reveal>
 
@@ -173,15 +237,14 @@ export default function ProjectDetail() {
         <Container>
           <Reveal className="max-w-2xl">
             <h2 className="poster text-[clamp(2.25rem,5vw,3.5rem)] text-white">
-              Want results like this?
+              {t.ctaTitle}
             </h2>
             <p className="mt-6 max-w-lg font-body text-base leading-relaxed text-white/80">
-              Book a free 15-minute call and we'll tell you exactly what your
-              business needs. No commitment, no pressure.
+              {t.ctaBody}
             </p>
             <div className="mt-9">
               <Button href="/contact" variant="white">
-                Book a free call
+                {t.call}
                 <ArrowUpRight className="h-4 w-4" />
               </Button>
             </div>

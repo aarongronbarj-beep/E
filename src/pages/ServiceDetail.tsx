@@ -3,11 +3,41 @@ import { Link, Navigate, useParams } from 'react-router-dom';
 import { ArrowLeft, ArrowUpRight, Check } from 'lucide-react';
 import { Container, Eyebrow, Button } from '../components/primitives';
 import Reveal from '../components/Reveal';
-import { getService, SERVICES } from '../lib/services';
+import { findService, useServices } from '../lib/services';
+import { useCopy } from '../lib/i18n';
+
+const COPY = {
+  fi: {
+    back: 'Kaikki palvelut',
+    call: 'Varaa ilmainen puhelu',
+    pricing: 'Katso hinnasto',
+    heroAlt: 'Verkkosivujen suunnittelumalleja',
+    getEyebrow: 'Mitä saat',
+    getTitle: 'Kaikki hoidettuna.',
+    moreEyebrow: 'Tutustu lisää',
+    moreTitle: 'Muut palvelut.',
+    ctaTitle: 'Valmis aloittamaan?',
+    ctaBody: 'Varaa ilmainen 15 minuutin puhelu, niin kerromme tarkalleen, mitä yrityksesi tarvitsee. Ei sitoumuksia, ei painostusta.',
+  },
+  en: {
+    back: 'All services',
+    call: 'Book a free call',
+    pricing: 'See pricing',
+    heroAlt: 'Website design mockups',
+    getEyebrow: 'What you get',
+    getTitle: 'Everything, handled.',
+    moreEyebrow: 'Keep exploring',
+    moreTitle: 'Other services.',
+    ctaTitle: 'Ready to get started?',
+    ctaBody: "Book a free 15-minute call and we'll tell you exactly what your business needs. No commitment, no pressure.",
+  },
+};
 
 export default function ServiceDetail() {
   const { slug } = useParams();
-  const service = getService(slug);
+  const t = useCopy(COPY);
+  const services = useServices();
+  const service = findService(services, slug);
 
   useEffect(() => {
     if (service) document.title = `${service.title} — Ealize`;
@@ -18,7 +48,7 @@ export default function ServiceDetail() {
 
   if (!service) return <Navigate to="/" replace />;
 
-  const others = SERVICES.filter((s) => s.slug !== service.slug);
+  const others = services.filter((s) => s.slug !== service.slug);
 
   return (
     <>
@@ -32,7 +62,7 @@ export default function ServiceDetail() {
                 className="group inline-flex items-center gap-2 font-body text-sm text-ink/60 transition-colors hover:text-blue"
               >
                 <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
-                All services
+                {t.back}
               </Link>
 
               <div className="mt-8">
@@ -47,11 +77,11 @@ export default function ServiceDetail() {
 
               <div className="mt-9 flex flex-wrap items-center gap-4">
                 <Button href="/contact">
-                  Book a free call
+                  {t.call}
                   <ArrowUpRight className="h-4 w-4" />
                 </Button>
                 <Button href="/pricing" variant="outline">
-                  See pricing
+                  {t.pricing}
                 </Button>
               </div>
             </Reveal>
@@ -61,7 +91,7 @@ export default function ServiceDetail() {
                 <div className="overflow-hidden rounded-2xl border border-line shadow-xl">
                   <img
                     src="/images/service-websites-hero.png"
-                    alt="Website design mockups"
+                    alt={t.heroAlt}
                     className="w-full"
                   />
                 </div>
@@ -115,9 +145,9 @@ export default function ServiceDetail() {
       <section className="border-b border-line bg-paper py-24 md:py-32">
         <Container>
           <Reveal className="max-w-2xl">
-            <Eyebrow>What you get</Eyebrow>
+            <Eyebrow>{t.getEyebrow}</Eyebrow>
             <h2 className="poster mt-6 text-[clamp(2rem,4.5vw,3rem)] text-ink">
-              Everything, handled.
+              {t.getTitle}
             </h2>
           </Reveal>
 
@@ -148,9 +178,9 @@ export default function ServiceDetail() {
       <section className="border-b border-line bg-paper-2 py-24 md:py-32">
         <Container>
           <Reveal>
-            <Eyebrow>Keep exploring</Eyebrow>
+            <Eyebrow>{t.moreEyebrow}</Eyebrow>
             <h2 className="poster mt-6 text-[clamp(2rem,4.5vw,3rem)] text-ink">
-              Other services.
+              {t.moreTitle}
             </h2>
           </Reveal>
 
@@ -185,15 +215,14 @@ export default function ServiceDetail() {
         <Container>
           <Reveal className="max-w-2xl">
             <h2 className="poster text-[clamp(2.25rem,5vw,3.5rem)] text-white">
-              Ready to get started?
+              {t.ctaTitle}
             </h2>
             <p className="mt-6 max-w-lg font-body text-base leading-relaxed text-white/80">
-              Book a free 15-minute call and we'll tell you exactly what your
-              business needs. No commitment, no pressure.
+              {t.ctaBody}
             </p>
             <div className="mt-9">
               <Button href="/contact" variant="white">
-                Book a free call
+                {t.call}
                 <ArrowUpRight className="h-4 w-4" />
               </Button>
             </div>
