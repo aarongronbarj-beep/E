@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { Container, Button } from './primitives';
 import Wordmark from './Wordmark';
 import { LANGS, useCopy, useLang } from '../lib/i18n';
+import { useNavThemeOverride } from '../lib/navOverlay';
 
 const COPY = {
   fi: {
@@ -32,7 +33,7 @@ const COPY = {
 };
 
 /** FI / EN toggle. Each option names itself in its own language for screen readers. */
-function LangSwitch({ className = '' }: { className?: string }) {
+function LangSwitch({ className = '', onArtwork = false }: { className?: string; onArtwork?: boolean }) {
   const { lang, setLang } = useLang();
   const t = useCopy(COPY);
   return (
@@ -46,7 +47,13 @@ function LangSwitch({ className = '' }: { className?: string }) {
           aria-pressed={lang === l}
           onClick={() => setLang(l)}
           className={`rounded px-1.5 py-1 font-body text-xs font-semibold uppercase tracking-wide transition-colors ${
-            lang === l ? 'text-blue' : 'text-ink/45 hover:text-ink'
+            onArtwork
+              ? lang === l
+                ? 'text-white'
+                : 'text-white/60 hover:text-white'
+              : lang === l
+                ? 'text-blue'
+                : 'text-ink/45 hover:text-ink'
           }`}
         >
           {l}
@@ -60,6 +67,16 @@ export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const t = useCopy(COPY);
+  const theme = useNavThemeOverride();
+  // Only while the bar is still transparent: once it has its own paper
+  // background, ink is the legible choice again.
+  const onArtwork = theme === 'dark' && !scrolled;
+  // A page sitting on light or mixed artwork asks for the background up
+  // front, rather than a transparent bar no text colour survives.
+  const solid = scrolled || theme === 'solid';
+  // The open mobile panel is paper-backed, so the bars return to ink once the
+  // menu is showing even while the bar itself is still transparent.
+  const bar = onArtwork && !open ? 'bg-white' : 'bg-ink';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -71,14 +88,14 @@ export default function Nav() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-        scrolled
+        solid
           ? 'border-b border-line bg-paper/85 backdrop-blur-md'
           : 'border-b border-transparent bg-transparent'
       }`}
     >
       <Container className="flex h-16 items-center justify-between">
         <Link to="/" aria-label={t.home}>
-          <Wordmark showMark={false} />
+          <Wordmark showMark={false} dark={onArtwork} />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
@@ -87,8 +104,10 @@ export default function Nav() {
               key={l.href}
               to={l.href}
               className={({ isActive }) =>
-                `font-body text-sm transition-colors hover:text-ink ${
-                  isActive ? 'text-blue' : 'text-ink/65'
+                `font-body text-sm transition-colors ${
+                  onArtwork
+                    ? `hover:text-white ${isActive ? 'text-white' : 'text-white/90'}`
+                    : `hover:text-ink ${isActive ? 'text-blue' : 'text-ink/65'}`
                 }`
               }
             >
@@ -98,23 +117,23 @@ export default function Nav() {
         </nav>
 
         <div className="hidden items-center gap-5 md:flex">
-          <LangSwitch />
+          <LangSwitch onArtwork={onArtwork} />
           <Button href="/contact">{t.cta}</Button>
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
-          <LangSwitch />
+          <LangSwitch onArtwork={onArtwork} />
           <button
             className="flex h-9 w-9 flex-col items-center justify-center gap-[5px]"
             aria-label={t.menu}
             onClick={() => setOpen((v) => !v)}
           >
             <span
-              className={`h-[2px] w-5 bg-ink transition-transform ${open ? 'translate-y-[7px] rotate-45' : ''}`}
+              className={`h-[2px] w-5 transition-transform ${bar} ${open ? 'translate-y-[7px] rotate-45' : ''}`}
             />
-            <span className={`h-[2px] w-5 bg-ink transition-opacity ${open ? 'opacity-0' : ''}`} />
+            <span className={`h-[2px] w-5 transition-opacity ${bar} ${open ? 'opacity-0' : ''}`} />
             <span
-              className={`h-[2px] w-5 bg-ink transition-transform ${open ? '-translate-y-[7px] -rotate-45' : ''}`}
+              className={`h-[2px] w-5 transition-transform ${bar} ${open ? '-translate-y-[7px] -rotate-45' : ''}`}
             />
           </button>
         </div>

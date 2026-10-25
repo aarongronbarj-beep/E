@@ -5,6 +5,8 @@ import { Container, Eyebrow, Button } from '../components/primitives';
 import Reveal from '../components/Reveal';
 import { findProject, useProjects } from '../lib/projects';
 import { useCopy } from '../lib/i18n';
+import { useStatic } from '../lib/motion';
+import { useNavTheme } from '../lib/navOverlay';
 
 const COPY = {
   fi: {
@@ -42,6 +44,13 @@ export default function ProjectDetail() {
   const t = useCopy(COPY);
   const projects = useProjects();
   const project = findProject(projects, slug);
+  const isStatic = useStatic();
+  // The hero is full-bleed media starting at the very top, so the nav lands on
+  // the artwork either way. Dark artwork carries a transparent, inverted nav;
+  // anything else keeps the ordinary paper bar, since a light or mixed still
+  // leaves no legible text colour.
+  const darkHero = Boolean(project?.darkHero);
+  useNavTheme(darkHero ? 'dark' : 'solid');
 
   useEffect(() => {
     if (project) document.title = `${project.name} — Ealize`;
@@ -56,48 +65,54 @@ export default function ProjectDetail() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="border-b border-line bg-paper-2 pt-28 pb-20 md:pt-36 md:pb-28">
-        <Container>
-          <Reveal className="max-w-3xl">
-            <Link
-              to="/work"
-              className="group inline-flex items-center gap-2 font-body text-sm text-ink/60 transition-colors hover:text-blue"
-            >
-              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
-              {t.back}
-            </Link>
+      {/* Hero: the reel, full screen and starting at the very top — no band
+          of page above it. The back link is laid over the footage rather than
+          sitting in a strip of its own, which is what used to push the video
+          down. The name, summary and live link that used to sit here were
+          removed by request; the heading survives as screen-reader text so the
+          page still has an h1 to be indexed and navigated by. */}
+      <section className="relative border-b border-line bg-ink">
+        <h1 className="sr-only">{project.name}</h1>
 
-            <div className="mt-8">
-              <Eyebrow>{project.tag}</Eyebrow>
-            </div>
-            <h1 className="poster mt-5 text-[clamp(2.5rem,6vw,4.25rem)] text-ink">
-              {project.name}
-              <span className="text-blue">.</span>
-            </h1>
-            <p className="mt-6 font-body text-lg leading-relaxed text-ink/65">
-              {project.summary}
-            </p>
+        {project.video && !isStatic ? (
+          <video
+            className="block w-full object-cover"
+            style={{ height: '100svh' }}
+            src={project.video}
+            poster={project.poster ?? project.img}
+            autoPlay
+            loop
+            muted
+            // Without this, iOS takes the video fullscreen instead of playing
+            // it inline, and autoplay is refused outright.
+            playsInline
+            preload="metadata"
+            aria-label={project.name}
+          />
+        ) : (
+          <img
+            src={project.video ? (project.poster ?? project.img) : project.img}
+            alt={project.name}
+            className="block w-full object-cover"
+            style={{ height: '100svh' }}
+          />
+        )}
 
-            {project.url && (
-              <div className="mt-9">
-                <Button href={project.url}>
-                  {t.visit}
-                  <ArrowUpRight className="h-4 w-4" />
-                </Button>
-              </div>
-            )}
-          </Reveal>
-
-          <Reveal delay={0.15} className="mt-16">
-            <div className="overflow-hidden rounded-2xl border border-line shadow-xl">
-              <img
-                src={project.img}
-                alt={project.name}
-                className="aspect-[16/9] w-full object-cover"
-              />
-            </div>
-          </Reveal>
+        <Container className="pointer-events-none absolute inset-x-0 top-24 md:top-28">
+          <Link
+            to="/work"
+            className={`group pointer-events-auto inline-flex items-center gap-2 font-body text-sm transition-colors ${
+              darkHero
+                ? 'text-white/80 hover:text-white'
+                : // Light or mixed artwork gives the link no colour that
+                  // clears AA — measured 1.19:1 as ink and 1.0:1 as white over
+                  // the Kesäyrittäjät still — so it brings its own paper chip.
+                  'rounded-full border border-line bg-paper/90 px-3 py-1.5 text-ink/80 backdrop-blur-sm hover:text-ink'
+            }`}
+          >
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+            {t.back}
+          </Link>
         </Container>
       </section>
 

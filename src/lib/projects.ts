@@ -7,6 +7,16 @@ export type Project = {
   /** Disciplines joined with ' & ' — the Work page builds its filters from these. */
   tag: string;
   img: string;
+  /** Optional looping reel used instead of `img` as the page's hero. Needs a
+   *  `poster` too: it is what reduced-motion visitors get in its place. */
+  video?: string;
+  poster?: string;
+  /** True when the hero media is dark enough to carry white text laid over it.
+   *  The project page's hero is full-bleed under a transparent nav, so this
+   *  decides whether the nav and back link invert. Measured, not guessed: the
+   *  Kokkoma reel is 6:1 against white at its brightest frame, while the
+   *  Kesäyrittäjät still is near-white in the nav band and must keep ink. */
+  darkHero?: boolean;
   /** Live site, shown as a link on the project page. */
   url?: string;
   /** One line under the title on the project page. */
@@ -27,6 +37,9 @@ const EN: Project[] = [
     name: 'Kokkoma Oy',
     tag: 'Website & SEO',
     img: IMG.work.kokkoma,
+    video: '/videos/kokkoma-showcase.mp4',
+    poster: '/images/kokkoma-showcase-poster.webp',
+    darkHero: true,
     url: 'https://kokkoma.fi',
     summary:
       'A modernised website for a Finnish concrete-engineering contractor, built to be found.',
@@ -91,6 +104,9 @@ const FI: Project[] = [
     name: 'Kokkoma Oy',
     tag: 'Verkkosivut & SEO',
     img: IMG.work.kokkoma,
+    video: '/videos/kokkoma-showcase.mp4',
+    poster: '/images/kokkoma-showcase-poster.webp',
+    darkHero: true,
     url: 'https://kokkoma.fi',
     summary:
       'Uudistetut verkkosivut suomalaiselle betonirakentamisen urakoitsijalle, rakennettu löytymään.',
