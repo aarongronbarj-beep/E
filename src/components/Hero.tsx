@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import GlitchLines from './GlitchText';
-import GlitchButton from './GlitchButton';
+import CtaButton from './CtaButton';
 import GradientWord from './GradientWord';
 import { reveal, useStatic } from '../lib/motion';
 import { IMG } from '../lib/assets';
@@ -88,7 +88,7 @@ export default function Hero() {
           </motion.div>
 
           <motion.div {...fadeProps(0.55)} className="md:absolute md:left-[calc(var(--u)*6.597)] md:top-[calc(var(--u)*47.361)]">
-            <GlitchButton href="/contact" label={t.cta} />
+            <CtaButton href="/contact" label={t.cta} />
           </motion.div>
         </div>
       </div>

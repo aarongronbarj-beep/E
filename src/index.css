@@ -94,6 +94,27 @@ body {
   pointer-events: none;
 }
 
+/* Cobalt rim on the primary CTA, swept slowly around the button. The angle is
+   a registered property so the conic gradient itself rotates — the element
+   stays put, only the colours travel. One speed throughout: changing the
+   duration mid-loop makes the gradient jump to a new position. */
+@property --rim-angle {
+  syntax: '<angle>';
+  initial-value: -60deg;
+  inherits: false;
+}
+@keyframes rim-spin {
+  to { --rim-angle: 300deg; }
+}
+.cta-rim {
+  background-image: conic-gradient(
+    from var(--rim-angle),
+    #b9c7ff, #6f8bff 20%, #002fd6 38%, #8ea4ff 55%, #dfe5ff 70%, #3d63f0 85%, #b9c7ff
+  );
+  animation: rim-spin 4s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .cta-rim { animation: none; }
 }
