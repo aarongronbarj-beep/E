@@ -41,4 +41,18 @@ export const IMG = {
     marketing: '/images/service-design.webp',
     seo: '/images/service-seo.svg',
   },
+  // Figma "Frame 9" (Ealize – Etusivu, node 82:280): home services menu variant.
+  servicesV2: {
+    brush: '/images/services-v2/brush.svg',
+    blackNotch: '/images/services-v2/black-notch.svg',
+    webBg: '/images/services-v2/web-bg.webp',
+    webHead: '/images/services-v2/web-head.svg',
+    green: '/images/services-v2/green.webp',
+    seoBg: '/images/services-v2/seo-bg.webp',
+    seoPolygon: '/images/services-v2/seo-polygon.svg',
+    phone: '/images/services-v2/phone.webp',
+    designFrame: '/images/services-v2/design-frame.svg',
+    btnDot: '/images/services-v2/btn-dot.svg',
+    btnArrow: '/images/services-v2/btn-arrow.svg',
+  },
 };
