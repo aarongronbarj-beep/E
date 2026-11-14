@@ -2,23 +2,28 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Container, Eyebrow } from './primitives';
 import Reveal from './Reveal';
+import GradientWord from './GradientWord';
 import { useServices } from '../lib/services';
 import { useCopy } from '../lib/i18n';
+
+/** Pointer-following glow like the hero's "tulosta", with a lime centre:
+ *  lime at the pointer, through cobalt, settling into black (ink). */
+const LIME_GLOW = '#acff12 0%, #1d07e0 35%, #0A0E1A 80%';
 
 const COPY = {
   fi: {
     eyebrow: 'Miten autamme',
-    title: 'Neljä asiaa.',
-    accent: 'Yksi ratkaisu.',
-    body: 'Verkkosivut, jotka tuovat yhteydenottoja. Data, joka kertoo mitä tehdä seuraavaksi. Markkinointi, joka tavoittaa oikeat ihmiset. Hakukoneoptimointi, jolla sinut löydetään. Yhdessä, ei erillisinä siiloina.',
+    title: 'Tuo lisää asiakkaita',
+    accent: 'palveluidemme avulla',
+    body: 'Siististä, ammattimaisesta ja edullisesta nettisivu-uudistuksesta, suuremmin kehitettyyn ja optimoituun digitaaliseen myyntitykkiin, jolla kilpaillaan maailman markkinoiden jättien kanssa. Meiltä löytyy vastaus, jokaiseen tarpeeseesi.',
     more: 'Lue lisää',
     imgAlt: 'työesimerkkejä',
   },
   en: {
     eyebrow: 'How we help',
-    title: 'Four things.',
-    accent: 'One solution.',
-    body: 'Websites that convert. Data that tells you what to do next. Marketing that reaches the right people. SEO that gets you found. Together, not in separate silos.',
+    title: 'Acquire more customers',
+    accent: 'with our services',
+    body: "From a clean, professional and affordable website refresh to a fully developed, optimised digital sales machine that competes with the world's biggest players. We have an answer for your every need.",
     more: 'Learn more',
     imgAlt: 'work examples',
   },
@@ -33,7 +38,7 @@ export default function Services() {
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow className="justify-center">{t.eyebrow}</Eyebrow>
           <h2 className="poster mt-6 text-[clamp(2.25rem,5vw,3.5rem)] text-ink">
-            {t.title} <span className="text-blue">{t.accent}</span>
+            {t.title} <GradientWord stops={LIME_GLOW}>{t.accent}</GradientWord>
           </h2>
           <p className="mx-auto mt-6 max-w-lg font-body text-base leading-relaxed text-ink/60">
             {t.body}

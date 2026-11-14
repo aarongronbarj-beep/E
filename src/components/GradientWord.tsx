@@ -14,7 +14,17 @@ import { useEffect, useRef, type ReactNode } from 'react';
  * them. Without a pointer (touch, or `?static` screenshots) the glow rests at a
  * fixed spot, so the word still carries the gradient.
  */
-export default function GradientWord({ children }: { children: ReactNode }) {
+/** The hero's cobalt glow: light cobalt at the pointer, falling off to ink. */
+const COBALT_GLOW = '#6f8bff 0%, #1d07e0 35%, #0A0E1A 80%';
+
+export default function GradientWord({
+  children,
+  stops = COBALT_GLOW,
+}: {
+  children: ReactNode;
+  /** Colour stops of the radial glow, centre first. */
+  stops?: string;
+}) {
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -47,7 +57,7 @@ export default function GradientWord({ children }: { children: ReactNode }) {
         ['--gx' as string]: '35%',
         ['--gy' as string]: '50%',
         backgroundImage:
-          'radial-gradient(circle 18rem at var(--gx) var(--gy), #6f8bff 0%, #1d07e0 35%, #0A0E1A 80%)',
+          `radial-gradient(circle 18rem at var(--gx) var(--gy), ${stops})`,
         WebkitBackgroundClip: 'text',
         // The poster's tight leading can push glyph tops and tails outside the
         // line box, where a text-clipped background doesn't paint. Grow the
