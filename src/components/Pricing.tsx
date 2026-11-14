@@ -75,7 +75,7 @@ const PLANS_FI: Plan[] = [
     cta: 'Aloita projekti',
   },
   {
-    name: 'Digitaalinen markkinointi',
+    name: 'Digitaalinen löydettävyys',
     price: 'Kuukausittain',
     note: 'hinta ilmaisen puhelun jälkeen',
     desc: 'Kampanjat ja hakukoneoptimointi, jotka tuovat oikeat ihmiset yritykseesi, ja tulokset raportoituna joka kuukausi.',
@@ -91,9 +91,9 @@ const PLANS_FI: Plan[] = [
   {
     name: 'Kokonaisratkaisu',
     price: 'Räätälöity',
-    desc: 'Kaikki Verkkosivut- ja Digitaalinen markkinointi -paketeista sekä data-analyysi koko yrityksesi datasta yhdessä näkymässä.',
+    desc: 'Kaikki Verkkosivut- ja Digitaalinen löydettävyys -paketeista sekä data-analyysi koko yrityksesi datasta yhdessä näkymässä.',
     features: [
-      'Kaikki Verkkosivut + Digitaalinen markkinointi -paketeista',
+      'Kaikki Verkkosivut + Digitaalinen löydettävyys -paketeista',
       'Liiketoiminnan työkalujen integraatiot ja kävijäseuranta',
       'Markkinointi-, tulo- ja kilpailija-analyysi sekä ennusteet',
       'Yhtenäinen näkymä ja ensisijainen tuki',

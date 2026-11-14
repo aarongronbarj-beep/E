@@ -3,7 +3,7 @@ import Panel from '../components/Panel';
 import Hero from '../components/Hero';
 import Testimonial from '../components/Testimonial';
 import Story from '../components/Story';
-import Flywheel from '../components/Flywheel';
+import PersonCard from '../components/PersonCard';
 import DarkSignal from '../components/DarkSignal';
 
 /**
@@ -26,7 +26,7 @@ export default function Home() {
       <Story />
 
       <Panel>
-        <Flywheel />
+        <PersonCard />
       </Panel>
 
       <Panel>

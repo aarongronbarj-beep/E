@@ -10,7 +10,7 @@ const COPY = {
   fi: {
     home: 'Ealize etusivu',
     blurb:
-      'Verkkosivut, data-analyysi, digitaalinen markkinointi ja hakukoneoptimointi pienyrityksille. Helsingistä, koko Suomelle.',
+      'Verkkosivut, data-analyysi, digitaalinen löydettävyys ja hakukoneoptimointi pienyrityksille. Helsingistä, koko Suomelle.',
     services: 'Palvelut',
     company: 'Yritys',
     companyLinks: [

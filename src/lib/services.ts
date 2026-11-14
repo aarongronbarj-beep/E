@@ -320,7 +320,7 @@ const FI: Service[] = [
     slug: 'digital-marketing',
     icon: Megaphone,
     img: IMG.service.marketing,
-    title: 'Digitaalinen markkinointi',
+    title: 'Digitaalinen löydettävyys',
     body: 'Mainontaa ja sisältöä, jotka tuovat yrityksesi oikeiden ihmisten eteen. Mitattuna, jotta tiedät mitä jokainen euro tuottaa.',
     intro:
       'Suunnittelemme ja toteutamme kampanjat, jotka tuovat oikeat ihmiset yritykseesi, ja mittaamme jokaisen, jotta tiedät tarkalleen mitä markkinointisi tuottaa.',
