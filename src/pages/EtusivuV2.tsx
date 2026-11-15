@@ -2,9 +2,78 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { CSSProperties, RefObject } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Link } from "react-router-dom";
 import { Eyebrow } from "../components/primitives";
+import Testimonial from "../components/Testimonial";
+import Story from "../components/Story";
+import Panel from "../components/Panel";
+import PersonCard from "../components/PersonCard";
+import DarkSignal from "../components/DarkSignal";
+import Footer from "../components/Footer";
+import { useCopy } from "../lib/i18n";
+import { useServices } from "../lib/services";
 
 gsap.registerPlugin(ScrollTrigger);
+
+/**
+ * Copy for the canvas, carried over from the live home page: the Figma frame
+ * shipped with English placeholders, the site leads in Finnish.
+ */
+const COPY = {
+  fi: {
+    nav: [
+      { label: "Palvelut", to: "/services" },
+      { label: "Työt", to: "/work" },
+      { label: "Meistä", to: "/about" },
+      { label: "Hinnasto", to: "/pricing" },
+    ],
+    contact: "Ota yhteyttä",
+    home: "Ealize, etusivu",
+    /** Hero slogan, with the lime word in the middle; lead from HomeHero. */
+    head: ["Nettisivut jotka tekevät ", "tulosta", ""],
+    lead: "Ealize on erikoistunut Google löydettävyyteen ja hakukoneoptimointiin",
+    about: "Meistä",
+    eyebrow: "Miten autamme",
+    servicesTitle: "Tuo lisää asiakkaita",
+    servicesAccent: "palveluidemme avulla",
+    servicesBody:
+      "Siististä, ammattimaisesta ja edullisesta nettisivu-uudistuksesta, suuremmin kehitettyyn ja optimoituun digitaaliseen myyntitykkiin, jolla kilpaillaan maailman markkinoiden jättien kanssa. Meiltä löytyy vastaus, jokaiseen tarpeeseesi.",
+    more: "Lue lisää",
+    examples: "työesimerkkejä",
+    seoPoints: [
+      "Sinun yrityksesi Google-haussa ykkösenä",
+      "Asiakkaat löytävät sinut ennen kilpailijoita",
+      "Jatkuvaa optimointia, ei kertaprojektia",
+    ],
+    seoName: "Hakukoneoptimointi",
+  },
+  en: {
+    nav: [
+      { label: "Services", to: "/services" },
+      { label: "Work", to: "/work" },
+      { label: "About", to: "/about" },
+      { label: "Pricing", to: "/pricing" },
+    ],
+    contact: "Contact us",
+    home: "Ealize, home",
+    head: ["Websites that deliver ", "results", ""],
+    lead: "Ealize specialises in Google findability and search engine optimisation",
+    about: "About us",
+    eyebrow: "How we help",
+    servicesTitle: "Acquire more customers",
+    servicesAccent: "with our services",
+    servicesBody:
+      "From a clean, professional and affordable website refresh to a fully developed, optimised digital sales machine that competes with the world's biggest players. We have an answer for your every need.",
+    more: "Learn more",
+    examples: "work examples",
+    seoPoints: [
+      "Your business first in Google search",
+      "Customers find you before your competitors",
+      "Ongoing optimisation, not a one-off project",
+    ],
+    seoName: "Search engine optimisation",
+  },
+};
 
 /**
  * Pixel-exact copy of the Figma frame "Frame 3" (node 45:213) from
@@ -35,7 +104,12 @@ const SERVICES_SCALE = 0.8;
 const SERVICES_H = 1820;
 const GOOGLE_SHIFT = SERVICES_H * (1 - SERVICES_SCALE);
 
-const DESIGN_H = 5170 - GOOGLE_SHIFT;
+/**
+ * The Figma frame runs to 5170, but below the Google section's clouds (which
+ * end at 4390) it is empty white. The canvas stops there, and the sections
+ * carried over from the old home page follow in normal flow.
+ */
+const DESIGN_H = 4390 - GOOGLE_SHIFT;
 
 const LIME = "#acff12";
 const COBALT = "#002fd6";
@@ -121,7 +195,7 @@ function NavWordmark({
 }
 
 /** Nav item with a rule that wipes in from the left and out to the right. */
-function NavLink({ label }: { label: string }) {
+function NavLink({ label, to }: { label: string; to: string }) {
   const textRef = useRef<HTMLSpanElement>(null);
   const ruleRef = useRef<HTMLSpanElement>(null);
 
@@ -137,10 +211,13 @@ function NavLink({ label }: { label: string }) {
   };
 
   return (
-    <span
-      className="relative inline-block shrink-0 cursor-pointer"
+    <Link
+      to={to}
+      className="relative inline-block shrink-0 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0a0e1a]"
       onMouseEnter={enter}
       onMouseLeave={leave}
+      onFocus={enter}
+      onBlur={leave}
     >
       <span ref={textRef} className="inline-block">
         {label}
@@ -156,7 +233,7 @@ function NavLink({ label }: { label: string }) {
           transformOrigin: "left center",
         }}
       />
-    </span>
+    </Link>
   );
 }
 
@@ -199,8 +276,6 @@ const NAV_COMPACT = {
   shadow: "0px 6px 24px rgba(10,14,26,0.16)",
 };
 
-const LINKS = ["Services", "Work", "About", "Pricing"];
-
 /**
  * Component 3 — the lime nav bar. It lives outside the scaled canvas as a
  * fixed layer so it can stay put while the page scrolls.
@@ -210,15 +285,16 @@ const LINKS = ["Services", "Work", "About", "Pricing"];
  * Once the page starts scrolling, GSAP tweens it to a compact full-width bar.
  */
 function StickyNav({ width, scale }: { width: number; scale: number }) {
+  const t = useCopy(COPY);
   const wrapRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const notchRef = useRef<HTMLDivElement>(null);
-  const logoBoxRef = useRef<HTMLDivElement>(null);
+  const logoBoxRef = useRef<HTMLAnchorElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const markRef = useRef<HTMLImageElement>(null);
   const wordRef = useRef<HTMLParagraphElement>(null);
   const linksRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLAnchorElement>(null);
   const ctaTextRef = useRef<HTMLParagraphElement>(null);
   const compact = useRef(false);
   const introDone = useRef(false);
@@ -312,7 +388,7 @@ function StickyNav({ width, scale }: { width: number; scale: number }) {
   };
 
   /* ---- magnetic CTA ---- */
-  const ctaMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const ctaMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const el = ctaRef.current;
     if (!el || reduced()) return;
     const r = el.getBoundingClientRect();
@@ -373,9 +449,11 @@ function StickyNav({ width, scale }: { width: number; scale: number }) {
         className="absolute left-0 flex items-center justify-between overflow-hidden"
         style={{ background: LIME }}
       >
-        <div
+        <Link
+          to="/"
+          aria-label={t.home}
           ref={logoBoxRef}
-          className="relative shrink-0 cursor-pointer"
+          className="relative block shrink-0 cursor-pointer"
           onMouseEnter={logoEnter}
           onMouseLeave={logoLeave}
         >
@@ -390,7 +468,7 @@ function StickyNav({ width, scale }: { width: number; scale: number }) {
           >
             <NavWordmark markRef={markRef} textRef={wordRef} />
           </div>
-        </div>
+        </Link>
 
         <div
           ref={linksRef}
@@ -405,12 +483,13 @@ function StickyNav({ width, scale }: { width: number; scale: number }) {
             color: INK,
           }}
         >
-          {LINKS.map((l) => (
-            <NavLink key={l} label={l} />
+          {t.nav.map((l) => (
+            <NavLink key={l.to} label={l.label} to={l.to} />
           ))}
         </div>
 
-        <div
+        <Link
+          to="/contact"
           ref={ctaRef}
           className="flex shrink-0 cursor-pointer items-center"
           style={{ background: COBALT }}
@@ -430,9 +509,9 @@ function StickyNav({ width, scale }: { width: number; scale: number }) {
               color: LIME,
             }}
           >
-            Contact us
+            {t.contact}
           </p>
-        </div>
+        </Link>
       </div>
     </div>
   );
@@ -443,8 +522,19 @@ function StickyNav({ width, scale }: { width: number; scale: number }) {
 /* ------------------------------------------------------------------ */
 
 /** Component 4 — the dark pill "Lue lisää" button. */
-function LueLisaaButton({ style }: { style: CSSProperties }) {
-  const rootRef = useRef<HTMLDivElement>(null);
+function LueLisaaButton({
+  style,
+  to,
+  label,
+  name,
+}: {
+  style: CSSProperties;
+  to: string;
+  label: string;
+  /** Says which page the generic label opens, for screen readers. */
+  name: string;
+}) {
+  const rootRef = useRef<HTMLAnchorElement>(null);
   const fillRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLParagraphElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
@@ -466,11 +556,13 @@ function LueLisaaButton({ style }: { style: CSSProperties }) {
   };
 
   return (
-    <div
+    <Link
+      to={to}
+      aria-label={`${label}: ${name}`}
       ref={rootRef}
       data-reveal="pop"
-      className="pointer-events-auto absolute cursor-pointer border border-solid border-black"
-      style={style}
+      className="pointer-events-auto absolute block cursor-pointer border border-solid border-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0a0e1a]"
+      style={{ ...style, borderRadius: 25 }}
       onMouseEnter={enter}
       onMouseLeave={leave}
       onMouseDown={() => tween(rootRef.current, { scale: 0.96 }, 0.12)}
@@ -496,7 +588,7 @@ function LueLisaaButton({ style }: { style: CSSProperties }) {
           color: "#ffffff",
         }}
       >
-        Lue lisää
+        {label}
       </p>
       <div
         ref={ringRef}
@@ -537,7 +629,7 @@ function LueLisaaButton({ style }: { style: CSSProperties }) {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -545,33 +637,32 @@ function LueLisaaButton({ style }: { style: CSSProperties }) {
 /* Service cards                                                       */
 /* ------------------------------------------------------------------ */
 
-type Card = { title: string; body: string; img: string };
+type Card = { title: string; body: string; img: string; href: string };
 
-const CARDS: Card[] = [
-  {
-    title: "Websites",
-    body: "Custom-built, fast and easy to manage, from first plan to launch and hosting.",
-    img: `${A}/49316.png`,
-  },
-  {
-    title: "Data Analytics",
-    body: "We connect the tools you already use with visitor data from your site, turned into one clear, plain-language picture.",
-    img: `${A}/640c9.png`,
-  },
-  {
-    title: "AI Automation",
-    body: "We automate the repetitive work that eats your week, so your time goes to customers.",
-    img: `${A}/b111e.png`,
-  },
-  {
-    title: "Graphic Design",
-    body: "Logos, animated ads, banners and full rebrands, sharp, on-brand visuals ready to ship.",
-    img: `${A}/2be0e.png`,
-  },
-];
+/**
+ * Card artwork per service. The Figma frame's mockups cover websites, data
+ * and design; digital marketing reuses the design board, as the services page
+ * does, and SEO uses the site's own search illustration.
+ */
+const CARD_IMG: Record<string, string> = {
+  websites: `${A}/49316.png`,
+  "data-analytics": `${A}/640c9.png`,
+  "digital-marketing": `${A}/2be0e.png`,
+  seo: "/images/service-seo.svg",
+};
 
-function ServiceCard({ card, index }: { card: Card; index: number }) {
-  const rootRef = useRef<HTMLDivElement>(null);
+function ServiceCard({
+  card,
+  index,
+  more,
+  examples,
+}: {
+  card: Card;
+  index: number;
+  more: string;
+  examples: string;
+}) {
+  const rootRef = useRef<HTMLAnchorElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const pillRef = useRef<HTMLDivElement>(null);
   const pillTextRef = useRef<HTMLParagraphElement>(null);
@@ -623,7 +714,7 @@ function ServiceCard({ card, index }: { card: Card; index: number }) {
   };
 
   /** Subtle pointer-following tilt. */
-  const move = (e: React.MouseEvent<HTMLDivElement>) => {
+  const move = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const el = rootRef.current;
     if (!el || reduced()) return;
     const r = el.getBoundingClientRect();
@@ -641,11 +732,12 @@ function ServiceCard({ card, index }: { card: Card; index: number }) {
   };
 
   return (
-    <div
+    <Link
+      to={card.href}
       ref={rootRef}
       data-reveal="up"
       data-reveal-delay={index * 0.08}
-      className="flex shrink-0 cursor-pointer flex-col items-center border border-solid bg-white"
+      className="flex shrink-0 cursor-pointer flex-col items-center border border-solid bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#002fd6]"
       style={{
         width: 548,
         gap: 32,
@@ -714,7 +806,7 @@ function ServiceCard({ card, index }: { card: Card; index: number }) {
               color: COBALT,
             }}
           >
-            Learn more
+            {more}
           </p>
           <div
             ref={dotRef}
@@ -742,12 +834,12 @@ function ServiceCard({ card, index }: { card: Card; index: number }) {
         <img
           ref={imgRef}
           src={card.img}
-          alt={`${card.title} examples`}
+          alt={`${card.title}: ${examples}`}
           className="pointer-events-none absolute h-full w-full object-contain"
           style={{ inset: 0, maxWidth: "none" }}
         />
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -836,10 +928,19 @@ function Sky() {
 /* ------------------------------------------------------------------ */
 
 export default function EtusivuV2() {
+  const t = useCopy(COPY);
+  const cards: Card[] = useServices().map((s) => ({
+    title: s.title,
+    body: s.body,
+    img: CARD_IMG[s.slug] ?? s.img,
+    href: `/services/${s.slug}`,
+  }));
   const hostRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
-  const headlineRef = useRef<HTMLParagraphElement>(null);
+  const headlineRef = useRef<HTMLHeadingElement>(null);
+  const heroRuleRef = useRef<HTMLDivElement>(null);
+  const heroLeadRef = useRef<HTMLParagraphElement>(null);
   const limeWordRef = useRef<HTMLSpanElement>(null);
   const bigMarkRef = useRef<HTMLDivElement>(null);
   const heroCloudsRef = useRef<HTMLDivElement>(null);
@@ -893,6 +994,12 @@ export default function EtusivuV2() {
           { color: "#ffffff" },
           { color: LIME, duration: 0.5, ease: "none" },
           0.75,
+        )
+        .from(heroRuleRef.current, { scaleX: 0, duration: 0.8, ease: EASE }, 0.7)
+        .from(
+          heroLeadRef.current,
+          { y: 16, opacity: 0, duration: 0.7, ease: EASE },
+          0.85,
         );
 
       /* ---- hero parallax ---- */
@@ -966,27 +1073,61 @@ export default function EtusivuV2() {
               <Sky />
             </div>
 
-            <p
+            {/* Slogan at Figma's 601px width, which breaks it into three
+                lines, then the home page hero's rule and lead. */}
+            <h1
               ref={headlineRef}
               className="absolute m-0"
               style={{
                 left: 27,
                 top: 160,
                 width: 601,
-                height: 267,
                 fontFamily: SG,
                 fontWeight: 700,
                 fontSize: 85.923,
-                lineHeight: 0,
+                lineHeight: "90px",
                 color: "#ffffff",
               }}
             >
-              <span style={{ lineHeight: "90px" }}>
-                {"Nettisivut, jotka tekevät "}
+              {t.head[0]}
+              <span ref={limeWordRef} style={{ color: LIME }}>
+                {t.head[1]}
               </span>
-              <span ref={limeWordRef} style={{ lineHeight: "90px", color: LIME }}>
-                tulosta
-              </span>
+              {t.head[2]}
+            </h1>
+
+            <div
+              ref={heroRuleRef}
+              className="absolute"
+              style={{
+                left: 27,
+                top: 458,
+                width: 527,
+                height: 2,
+                background: "#ffffff",
+                transformOrigin: "left center",
+                zIndex: 1,
+              }}
+            />
+            {/* Above the clouds (z-index), whose wisps reach this line; the
+                soft blue shadow keeps it legible over them. */}
+            <p
+              ref={heroLeadRef}
+              className="absolute m-0"
+              style={{
+                zIndex: 1,
+                textShadow: "0 1px 14px rgba(0, 24, 140, 0.55)",
+                left: 27,
+                top: 478,
+                width: 470,
+                fontFamily: INTER,
+                fontWeight: 500,
+                fontSize: 22,
+                lineHeight: 1.35,
+                color: "#ffffff",
+              }}
+            >
+              {t.lead}
             </p>
 
             <div
@@ -1041,7 +1182,6 @@ export default function EtusivuV2() {
               secondLeft="115.84%"
               secondTop="-89.63%"
             />
-
             <div
               className="absolute overflow-hidden bg-white"
               style={{ left: -1019, top: 1031, width: 1440, height: 746 }}
@@ -1220,11 +1360,15 @@ export default function EtusivuV2() {
             </div>
 
             {/* Hit area covering the whole "Meistä" affordance */}
-            <div
-              className="absolute cursor-pointer"
+            <Link
+              to="/about"
+              aria-label={t.about}
+              className="absolute block cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0a0e1a]"
               style={{ left: 392, top: 396, width: 292, height: 119 }}
               onMouseEnter={meistaEnter}
               onMouseLeave={meistaLeave}
+              onFocus={meistaEnter}
+              onBlur={meistaLeave}
             />
           </div>
 
@@ -1257,26 +1401,26 @@ export default function EtusivuV2() {
               style={{ gap: 24 }}
             >
               <div data-reveal="up">
-                <Eyebrow>How we help</Eyebrow>
+                <Eyebrow>{t.eyebrow}</Eyebrow>
               </div>
-              <p
+              <h2
                 data-reveal="up"
                 data-reveal-delay="0.08"
-                className="m-0 shrink-0 whitespace-nowrap text-center"
+                className="m-0 shrink-0 text-center"
                 style={{
                   fontFamily: SG,
                   fontWeight: 700,
                   fontSize: 56,
-                  lineHeight: 0,
+                  lineHeight: 0.95,
                   letterSpacing: "-1.68px",
                   color: INK,
+                  maxWidth: 900,
+                  textWrap: "balance",
                 }}
               >
-                <span style={{ lineHeight: 0.95 }}>{"Four things. "}</span>
-                <span style={{ lineHeight: 0.95, color: LIME }}>
-                  One solution.
-                </span>
-              </p>
+                {t.servicesTitle}{" "}
+                <span style={{ color: COBALT }}>{t.servicesAccent}</span>
+              </h2>
               <p
                 data-reveal="up"
                 data-reveal-delay="0.16"
@@ -1290,9 +1434,7 @@ export default function EtusivuV2() {
                   width: 512,
                 }}
               >
-                Websites that convert. Design that gets noticed. Data that tells
-                you what to do next. Automation that gives you your time back.
-                Together, not in separate silos.
+                {t.servicesBody}
               </p>
             </div>
 
@@ -1300,8 +1442,14 @@ export default function EtusivuV2() {
               className="relative flex w-full shrink-0 flex-wrap items-start overflow-hidden"
               style={{ gap: 24 }}
             >
-              {CARDS.map((c, i) => (
-                <ServiceCard key={c.title} card={c} index={i} />
+              {cards.map((c, i) => (
+                <ServiceCard
+                  key={c.href}
+                  card={c}
+                  index={i}
+                  more={t.more}
+                  examples={t.examples}
+                />
               ))}
             </div>
           </div>
@@ -1385,7 +1533,7 @@ export default function EtusivuV2() {
 
             {[3750, 3832, 3904].map((top, i) => (
               <p
-                key={top}
+                key={t.seoPoints[i]}
                 data-reveal="left"
                 data-reveal-delay={0.1 + i * 0.1}
                 className="absolute m-0"
@@ -1401,7 +1549,7 @@ export default function EtusivuV2() {
                   color: "#ffffff",
                 }}
               >
-                Sinun yrityksesi google haussa ykkösemä
+                {t.seoPoints[i]}
               </p>
             ))}
 
@@ -1500,7 +1648,7 @@ export default function EtusivuV2() {
                 color: "#1154f4",
               }}
             >
-              50e/h
+              50{" "}€/h
             </p>
 
             <p
@@ -1520,6 +1668,9 @@ export default function EtusivuV2() {
             </p>
 
             <LueLisaaButton
+              to="/services/seo"
+              label={t.more}
+              name={t.seoName}
               style={{ left: 861, top: 4033, width: 199, height: 59 }}
             />
 
@@ -1548,6 +1699,25 @@ export default function EtusivuV2() {
           </div>
         </div>
       </div>
+
+      {/* Carried over from the old home page, in its order. The services
+          menu and SEO band are left out: the canvas above already covers both. */}
+      <main>
+        <Testimonial />
+
+        {/* Outside Panel: Panel transforms its wrapper while scrolling, which
+            would fight the pinned column in the process steps. */}
+        <Story />
+
+        <Panel>
+          <PersonCard />
+        </Panel>
+
+        <Panel>
+          <DarkSignal />
+        </Panel>
+      </main>
+      <Footer />
     </>
   );
 }
