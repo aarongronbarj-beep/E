@@ -114,7 +114,57 @@ body {
   animation: rim-spin 4s linear infinite;
 }
 
+/* Home hero accent word ("tulosta"): on hover a green glow lights the letters
+   around the cursor and fades back to the blue word at its edge. HomeHero
+   moves --mx / --my after the pointer; without them (reduced motion) the glow
+   sits in the middle of the word. Dark green at the rim keeps the letters
+   legible over the lime streaks. */
+.hero-accent-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  color: transparent;
+  background-image: radial-gradient(
+    circle 1.9em at var(--mx, 50%) var(--my, 50%),
+    #acff12 0%, #7ee01a 30%, #2fae2c 62%, rgba(31, 157, 58, 0) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.hero-accent-wrap:hover .hero-accent-fill {
+  opacity: 1;
+}
+
+/* Home hero CTA: a lime rim spinning around the button (same --rim-angle
+   trick as .cta-rim) and a ripple that rings out from it. The ripple is a
+   spreading shadow rather than a scale, so it keeps an even gap around a
+   wide rounded rectangle. */
+.hero-cta-ring {
+  background-image: conic-gradient(
+    from var(--rim-angle),
+    #acff12, #2fae2c 22%, rgba(172, 255, 18, 0) 42%, #acff12 58%, #7ee01a 80%, #acff12
+  );
+  animation: rim-spin 3.2s linear infinite;
+}
+.hero-cta-ripple {
+  animation: cta-ripple 2.6s cubic-bezier(0.2, 0.7, 0.3, 1) infinite;
+}
+@keyframes cta-ripple {
+  0%   { box-shadow: 0 0 0 0 rgba(172, 255, 18, 0.85); }
+  100% { box-shadow: 0 0 0 22px rgba(172, 255, 18, 0); }
+}
+.hero-cta:focus-visible .hero-cta-ring {
+  box-shadow: 0 0 0 3px #ffffff, 0 0 0 6px #002fd6;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .cta-rim { animation: none; }
+  .hero-accent-fill { transition: none; }
+  .hero-cta-ring { animation: none; }
+  .hero-cta-ripple { display: none; }
 }
