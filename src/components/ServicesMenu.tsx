@@ -67,15 +67,21 @@ const COPY = {
  * From md up the frame is drawn at its 1440×856 design size and scaled with
  * the section: `--p` is one design pixel, so every position below is the
  * Figma coordinate times `--p`. Below md the cards stack in normal flow, since
- * a scaled 1440 frame would shrink the copy past legibility.
+ * a scaled 1440 frame would shrink the copy past legibility. The frame keeps
+ * growing with the viewport up to 1920px wide, then stays centred.
  *
  * Motion, all of it skipped under reduced motion or `?static`:
  *   - headings tear in through the site's glitch;
  *   - rules draw from the left, the heading's lime underline with them;
- *   - each card wipes open, its artwork settles out of a zoom, then keeps a
- *     slow drift and a scroll parallax; slanted panels slide in, the laptop,
- *     phone and dashboard spring up and float, the button pops;
- *   - cards tilt towards the pointer and push their artwork in on hover.
+ *   - each card wipes open, its artwork settles out of a slight zoom, then
+ *     keeps a slow, small drift and a light scroll parallax; slanted panels
+ *     slide in, the laptop, phone and dashboard rise in and float gently,
+ *     the button fades up;
+ *   - cards lean a little towards the pointer and push their artwork in
+ *     slightly on hover.
+ *
+ * All of it is deliberately restrained: the band sits among several other
+ * animated sections, so nothing here bounces or travels far.
  */
 const p = (n: number) => `calc(var(--p) * ${n})`;
 const box = (
@@ -117,29 +123,29 @@ const slideIn = (delay: number): Variants => ({
   show: { x: "0%", transition: at(delay, 1) },
 });
 const pop = (delay: number): Variants => ({
-  hidden: { opacity: 0, y: 20, scale: 0.85 },
+  hidden: { opacity: 0, y: 12, scale: 0.95 },
   show: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { delay, type: "spring", stiffness: 260, damping: 18 },
+    transition: { delay, type: "spring", stiffness: 260, damping: 28 },
   },
 });
-/** A device springing up into the card from below, with a slight turn. */
-const springUp = (delay: number, rotate = -8): Variants => ({
-  hidden: { opacity: 0, y: "70%", rotate },
+/** A device rising into the card from below, with a slight turn. */
+const springUp = (delay: number, rotate = -3): Variants => ({
+  hidden: { opacity: 0, y: "30%", rotate },
   show: {
     opacity: 1,
     y: "0%",
     rotate: 0,
-    transition: { delay, type: "spring", stiffness: 120, damping: 16 },
+    transition: { delay, type: "spring", stiffness: 110, damping: 26 },
   },
 });
 /** Card artwork: settles out of a zoom, and leans in while the card is hovered. */
 const settle: Variants = {
-  hidden: { scale: 1.25 },
-  show: { scale: 1, transition: { duration: 1.8, ease: EASE } },
-  hover: { scale: 1.07, transition: { duration: 0.8, ease: EASE } },
+  hidden: { scale: 1.08 },
+  show: { scale: 1, transition: { duration: 1.4, ease: EASE } },
+  hover: { scale: 1.03, transition: { duration: 0.8, ease: EASE } },
 };
 const fromLeft = { transformOrigin: "left center" } as const;
 
@@ -154,7 +160,7 @@ const play = (isStatic: boolean, amount = 0.3) =>
       };
 
 /** Pointer tilt for a card, springing back flat when the pointer leaves. */
-function useTilt(isStatic: boolean, max = 4) {
+function useTilt(isStatic: boolean, max = 1.5) {
   const rotateX = useSpring(0, { stiffness: 150, damping: 18 });
   const rotateY = useSpring(0, { stiffness: 150, damping: 18 });
   if (isStatic) return { style: {} };
@@ -215,9 +221,9 @@ function Art({
           animate={
             isStatic
               ? undefined
-              : { x: ["0%", "-1.5%", "0%"], y: ["0%", "1%", "0%"] }
+              : { x: ["0%", "-0.6%", "0%"], y: ["0%", "0.4%", "0%"] }
           }
-          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
     </motion.div>
@@ -229,7 +235,7 @@ function Float({
   src,
   className = "",
   delay = 1.4,
-  distance = "-1.6%",
+  distance = "-0.8%",
 }: {
   src: string;
   className?: string;
@@ -244,7 +250,7 @@ function Float({
       aria-hidden
       className={`pointer-events-none max-w-none ${className}`}
       animate={isStatic ? undefined : { y: ["0%", distance, "0%"] }}
-      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay }}
+      transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay }}
     />
   );
 }
@@ -264,21 +270,21 @@ type Copy = (typeof COPY)["fi"];
 function Desktop({ t }: { t: Copy }) {
   const isStatic = useStatic();
   const frame = useRef<HTMLDivElement>(null);
-  const webY = useParallax(frame, 45);
-  const seoY = useParallax(frame, 25);
-  const dataY = useParallax(frame, 20);
-  const designY = useParallax(frame, 35);
-  const webTilt = useTilt(isStatic);
-  const seoTilt = useTilt(isStatic, 3);
-  const dataTilt = useTilt(isStatic, 5);
-  const designTilt = useTilt(isStatic, 4);
+  const webY = useParallax(frame, 22);
+  const seoY = useParallax(frame, 12);
+  const dataY = useParallax(frame, 10);
+  const designY = useParallax(frame, 18);
+  const webTilt = useTilt(isStatic, 1.5);
+  const seoTilt = useTilt(isStatic, 1.2);
+  const dataTilt = useTilt(isStatic, 2);
+  const designTilt = useTilt(isStatic, 1.5);
   return (
     <div className="hidden md:block">
       <div
         ref={frame}
         // Height by aspect ratio: cqw on the container itself would resolve
         // against the viewport, not this box.
-        className="relative mx-auto aspect-[1440/856] max-w-[1440px] overflow-hidden [container-type:inline-size] [--p:calc(100cqw/1440)]"
+        className="relative mx-auto aspect-[1440/856] max-w-[1920px] overflow-hidden [container-type:inline-size] [--p:calc(100cqw/1440)]"
       >
         <motion.div {...play(isStatic, 0.6)} style={box(117, 51, 260, 80)}>
           <h2
@@ -382,7 +388,7 @@ function Desktop({ t }: { t: Copy }) {
               />
             </motion.div>
             <motion.div
-              variants={springUp(0.7, 10)}
+              variants={springUp(0.7, 4)}
               style={box(203.41, 323.79, 252.554, 335.208)}
             >
               <Float src={A.laptop} className="h-full w-full object-cover" />
@@ -478,7 +484,7 @@ function Desktop({ t }: { t: Copy }) {
                 src={A.dashboard}
                 className="h-full w-full object-cover"
                 delay={1.6}
-                distance="-3%"
+                distance="-1.5%"
               />
             </motion.div>
           </motion.div>

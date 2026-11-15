@@ -1,6 +1,6 @@
 import ArtSeam from '../components/ArtSeam';
 import Panel from '../components/Panel';
-import Hero from '../components/Hero';
+import HomeHero from '../components/HomeHero';
 import Testimonial from '../components/Testimonial';
 import Story from '../components/Story';
 import ServicesMenu from '../components/ServicesMenu';
@@ -15,9 +15,8 @@ import DarkSignal from '../components/DarkSignal';
 export default function Home() {
   return (
     <>
-      <Panel mode="lag" distance={70}>
-        <Hero />
-      </Panel>
+      {/* Hero + its own nav from Figma (Ealize – Etusivu, node 105:3575). */}
+      <HomeHero />
 
       <ArtSeam />
 

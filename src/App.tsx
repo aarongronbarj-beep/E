@@ -13,6 +13,7 @@ import Home from './pages/Home';
 import ServiceDetail from './pages/ServiceDetail';
 import CategoryPage from './pages/CategoryPage';
 import ProjectDetail from './pages/ProjectDetail';
+import EtusivuV2 from './pages/EtusivuV2';
 import Services from './components/Services';
 import Work from './components/Work';
 import Founders from './components/Founders';
@@ -42,43 +43,63 @@ export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <div className="min-h-screen bg-paper">
-        <Nav />
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route
-              path="/services"
-              element={<CategoryPage title={t.services}><Services /></CategoryPage>}
-            />
-            <Route path="/services/:slug" element={<ServiceDetail />} />
-            <Route
-              path="/work"
-              element={<CategoryPage title={t.work}><Work /></CategoryPage>}
-            />
-            <Route path="/work/:slug" element={<ProjectDetail />} />
-            <Route
-              path="/about"
-              element={<CategoryPage title={t.about}><Founders /></CategoryPage>}
-            />
-            <Route
-              path="/pricing"
-              element={<CategoryPage title={t.pricing}><Pricing /></CategoryPage>}
-            />
-            <Route
-              path="/contact"
-              element={
-                <CategoryPage title={t.contact}>
-                  <Team />
-                  <Contact />
-                </CategoryPage>
-              }
-            />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+      <Routes>
+        {/* Pixel copy of the Figma frame — ships its own nav, so no site chrome. */}
+        <Route path="/etusivu-v2" element={<EtusivuV2 />} />
+        {/* The home hero (Figma 105:3575) carries its own nav. */}
+        <Route
+          path="/"
+          element={
+            <div className="min-h-screen bg-paper">
+              <main>
+                <Home />
+              </main>
+              <Footer />
+            </div>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <div className="min-h-screen bg-paper">
+              <Nav />
+              <main>
+                <Routes>
+                  <Route
+                    path="/services"
+                    element={<CategoryPage title={t.services}><Services /></CategoryPage>}
+                  />
+                  <Route path="/services/:slug" element={<ServiceDetail />} />
+                  <Route
+                    path="/work"
+                    element={<CategoryPage title={t.work}><Work /></CategoryPage>}
+                  />
+                  <Route path="/work/:slug" element={<ProjectDetail />} />
+                  <Route
+                    path="/about"
+                    element={<CategoryPage title={t.about}><Founders /></CategoryPage>}
+                  />
+                  <Route
+                    path="/pricing"
+                    element={<CategoryPage title={t.pricing}><Pricing /></CategoryPage>}
+                  />
+                  <Route
+                    path="/contact"
+                    element={
+                      <CategoryPage title={t.contact}>
+                        <Team />
+                        <Contact />
+                      </CategoryPage>
+                    }
+                  />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </main>
+              <Footer />
+            </div>
+          }
+        />
+      </Routes>
     </BrowserRouter>
   );
 }

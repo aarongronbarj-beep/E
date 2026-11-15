@@ -65,6 +65,13 @@ type Copy = (typeof COPY)["fi"];
  * section (`--p` is one design pixel). The Figma frame is 1440×1452 but empty
  * below the clouds, so it is cut at 962, where they fade to white.
  *
+ * The frame scales with the viewport up to 1920px wide (matching the services
+ * menu above it). Wider than that the content stays in the centred frame, but the dark
+ * band and the cloud bank run on to the viewport edges: two gutter fills
+ * continue the band (matching the step in its top edge) and the cloud layer
+ * widens to the full viewport, stretching rather than cropping so its solid
+ * white bottom edge still lands on the frame bottom.
+ *
  * Motion, all skipped under reduced motion or `?static`: the headline glitches
  * in and its underline draws; the points slide in along a lime rule that grows
  * down; the phone springs up and floats; the price card opens from the top,
@@ -200,12 +207,37 @@ function Desktop({ t }: { t: Copy }) {
   const cloudsY = useTransform(scrollYProgress, [0, 1], [70, -50]);
   const roseY = useTransform(scrollYProgress, [0, 1], [40, -40]);
   return (
-    <div className="hidden md:block">
+    <div className="hidden overflow-x-clip md:block">
       <motion.div
         ref={frame}
         {...play(isStatic)}
-        className="relative mx-auto aspect-[1440/962] max-w-[1440px] overflow-hidden [container-type:inline-size] [--p:calc(100cqw/1440)]"
+        className="relative mx-auto aspect-[1440/962] max-w-[1920px] overflow-x-visible overflow-y-clip [container-type:inline-size] [--p:calc(100cqw/1440)]"
       >
+        {/* Band continued into the side gutters on screens wider than the
+            frame. The band's top edge steps up at x=763, so the left gutter
+            starts 41.72px lower than the right one. */}
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            left: "calc(50% - 50vw)",
+            width: "calc(50vw - 50%)",
+            top: p(57 + 41.72),
+            height: p(903 - 41.72),
+            background: INK,
+          }}
+        />
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            left: "100%",
+            width: "calc(50vw - 50%)",
+            top: p(57),
+            height: p(903),
+            background: INK,
+          }}
+        />
         <img
           src={A.band}
           alt=""
@@ -352,12 +384,18 @@ function Desktop({ t }: { t: Copy }) {
         <motion.div
           aria-hidden
           className="pointer-events-none"
-          style={{ ...box(-28.8, 182, 1497.6, 780), ...(!isStatic && { y: cloudsY }) }}
+          style={{
+            ...box(-28.8, 182, 1497.6, 780),
+            // Reach the viewport edges once the screen outgrows the frame.
+            left: `min(${p(-28.8)}, calc(50% - 50vw))`,
+            width: `max(${p(1497.6)}, 100vw)`,
+            ...(!isStatic && { y: cloudsY }),
+          }}
         >
           <motion.img
             src={A.clouds}
             alt=""
-            className="h-full w-full max-w-none object-cover"
+            className="h-full w-full max-w-none object-cover min-[1998px]:object-fill"
             animate={isStatic ? undefined : { x: ["0%", "-1.5%", "0%"] }}
             transition={{ duration: 26, repeat: Infinity, ease: "easeInOut" }}
           />
